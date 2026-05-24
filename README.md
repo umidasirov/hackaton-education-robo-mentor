@@ -64,7 +64,7 @@
 | 🎓 **O'rgatuvchi rejim (3 urinish)** | Xato topilganda darrov javob bermaydi — 3 bosqichda: ishora → maslahat → to'liq yechim + sabab |
 | 💡 **Sxemaga asoslangan autocomplete** | Editorda kod yozayotganda AI sxemadagi pinlarga qarab kod taklif qiladi (ghost text) |
 | 🚀 **Portlash/zarar tekshiruvi** | RUN bosilganda fizik xavflarni aniqlaydi: LED kuyishi, qisqa tutashuv, ortiqcha tok |
-| 🌍 **To'liq o'zbek tilida** | Barcha javoblar, xabarlar va interfeys o'zbek tilida |
+| 🌍 **O'zbek tilida** | Barcha javoblar, xabarlar va interfeys o'zbek tilida |
 
 ### 📐 Vizual simulyator
 - **48+ interaktiv komponent** — LED, sensor, motor, displey va boshqalar
@@ -320,68 +320,6 @@ robomentor/
 | **Kengaytiruvchanlik** | Yangi komponent/loyiha qo'shish — faqat bitta fayl yozish |
 
 ---
-
-## 🔮 Kelajakdagi rejalar (Premium)
-
-> ⏳ Bu bo'lim hozircha ishlab chiqilmoqda — konkurs muddati yetmagani uchun to'liq ishga tushira olmadik, lekin arxitektura tayyor.
-
-### 💎 RoboMentor Pro (oylik obuna)
-
-Bepul versiyada AI sxemangizni **tekshiradi va o'rgatadi**. Pro versiyada esa AI **siz uchun butun prototipni noldan yaratadi**.
-
-| Xususiyat | Bepul | Pro 💎 |
-|-----------|:-----:|:------:|
-| Real vaqtli sxema tekshiruvi | ✅ | ✅ |
-| 3 bosqichli o'rgatuvchi rejim | ✅ | ✅ |
-| **AI generatsiya — tabiiy tilda buyruq** | ❌ | ✅ |
-| **Avtomatik sxema (diagram) qurish** | ❌ | ✅ |
-| **Tayyor kod yozib berish** | ❌ | ✅ |
-| **Optimallashtirish + tahlil** | ❌ | ✅ |
-
-### ⚡ AI generatsiya qanday ishlaydi
-
-Foydalanuvchi oddiy tilda yozadi, AI tugallangan prototip qaytaradi:
-
-```
-👤 "Menga aqlli svetofor sxemasini yoz"
-         │
-         ▼
-   🧠 AI Generator (70b model)
-         │
-         ├── 📐 Mikrosxema ulanishini chizadi
-         │     (LED'lar, rezistorlar, Arduino pinlari avtomatik)
-         │
-         ├── 💻 To'liq kodni yozadi
-         │     (svetofor mantiq + tayming + holatlar)
-         │
-         ├── ⚖️  + / − tomonlarini ko'rsatadi
-         │     ("Bu yondashuv arzon, lekin..." )
-         │
-         └── 🚀 Optimallashtirilgan tayyor prototip
-               (simulyatorga avtomatik yuklanadi → RUN bosilsa ishlaydi)
-```
-
-### 🎯 Misol natija
-
-```
-👤 So'rov:  "Aqlli svetofor — piyodalar tugmasi bilan"
-
-🤖 AI qaytaradi:
-   ┌─────────────────────────────────────────────┐
-   │ 📐 SXEMA                                      │
-   │   • 3× LED (qizil/sariq/yashil) → D2,D3,D4    │
-   │   • 3× 220Ω rezistor                          │
-   │   • 1× tugma → D7 (pull-up)                    │
-   │                                               │
-   │ 💻 KOD: tayyor (45 qator, izohlar bilan)      │
-   │                                               │
-   │ ⚖️ TAHLIL:                                     │
-   │   + Kam komponent, oddiy ulanish              │
-   │   + Tugma uzilishi (debounce) hisobga olingan │
-   │   − Real svetofordagi sensorlar yo'q          │
-   │   💡 Yaxshilash: LDR qo'shib tungi rejim      │
-   └─────────────────────────────────────────────┘
-```
 
 **Backend tayyorgarligi:** `ai_tutor.py` ga `generate_prototype` metodi qo'shiladi — mavjud ikki modelli arxitekturadan foydalanadi (70b model, sxema + kod birga JSON formatda qaytaradi). Frontend simulyatorga avtomatik yuklash qismi `useSimulatorStore` orqali ulanadi.
 
