@@ -14,10 +14,9 @@ body {
 
 /* ── App shell ──────────────────────────────────── */
 .app {
-  height: 100vh;
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
-  overflow: hidden;
   overscroll-behavior: none;
 }
 
@@ -366,5 +365,60 @@ body {
 
   .header-hamburger {
     display: flex;
+  }
+}
+
+/* ── Hujjatlar dropdown ──────────────────────────────────── */
+.header-docs-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.header-docs-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  min-width: 190px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  animation: docsMenuIn 0.14s ease;
+}
+
+@keyframes docsMenuIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header-docs-item {
+  padding: 8px 12px;
+  color: #c4c4c8;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.header-docs-item:hover {
+  color: #f5f5f7;
+  background: rgba(0, 113, 227, 0.15);
+}
+
+/* Mobil rejimda dropdown oddiy ro'yxat bo'lib ochiladi */
+@media (max-width: 768px) {
+  .header-docs-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0 0 0 12px;
+    margin-top: 2px;
   }
 }

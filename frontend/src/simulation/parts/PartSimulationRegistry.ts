@@ -30,7 +30,8 @@ export interface PartSimulationLogic {
      *
      * @param element The DOM element of the wokwi component
      * @param avrSimulator The running simulator instance
-     * @param getArduinoPinHelper Function to find what Arduino pin is connected to a specific component pin
+     * @param getArduinoPinHelper Maps a component pin to a GPIO index (≥0), or -1 (GND) / -2 (fixed HIGH)
+     *   when wired to a power rail including the 9V battery terminals.
      * @param componentId The unique ID of this component instance (used by SensorUpdateRegistry)
      * @returns A cleanup function to remove event listeners when simulation stops
      */

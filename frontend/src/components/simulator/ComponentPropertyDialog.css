@@ -54,25 +54,90 @@
 }
 
 .pin-roles-section {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  background: #2b2b2b;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #3a3a3a;
 }
 
-.pin-roles-label {
-  font-size: 12px;
-  color: #aaa;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.pin-role-item {
-  font-size: 12px;
-  color: #fff;
-  padding: 4px 8px;
-  margin: 2px 0;
-  background-color: #3d3d3d;
-  border-radius: 4px;
+/* HEADER */
+.pin-roles-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
+}
+
+.pin-roles-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e5e5;
+}
+
+.pin-roles-count {
+  font-size: 11px;
+  background: #444;
+  color: #bbb;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* LIST */
+.pin-roles-list {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* ITEM */
+.pin-role-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  background: #3a3a3a;
+  border-radius: 6px;
+  transition: 0.15s ease;
+}
+
+.pin-role-item:hover {
+  background: #444;
+}
+
+.pin-dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+}
+
+.pin-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.pin-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.pin-description {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* SCROLLBAR (optional chiroyli) */
+.pin-roles-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pin-roles-list::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
 }
 
 .pin-name {

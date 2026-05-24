@@ -16,6 +16,8 @@ import type { ComponentMetadata } from '../types/component-metadata';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { PartSimulationRegistry } from '../simulation/parts';
 import { isBoardComponent, boardPinToNumber } from '../utils/boardPinMapping';
+import { SIM_PIN_GND, SIM_PIN_VCC } from '../simulation/simPowerConstants';
+import { battery9vBothTerminalsWired } from '../simulation/batteryModel';
 
 interface DynamicComponentProps {
   id: string;
@@ -52,11 +54,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
   const running = useSimulatorStore((s) => s.running);
   const simulator = useSimulatorStore((s) => s.simulator);
   // hexEpoch increments each time a new hex is loaded, triggering a fresh
-  // attachEvents call (and re-registration of I2C devices on the new bus).
-  // We intentionally do NOT depend on `running` so that I2C displays and
-  // other protocol parts (SSD1306, DS1307 …) are NOT torn down and
-  // re-created on every stop/play cycle — which previously caused the
-  // display to flash blank and lose its frame buffer.
+  // attachEvents call when simulation is running (re-registration of I2C, etc.).
   const hexEpoch = useSimulatorStore((s) => s.hexEpoch);
 
   // Track wires connected to this component so attachEvents re-runs when
@@ -203,20 +201,72 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
     const logic = PartSimulationRegistry.get(metadata.id || id.split('-')[0]);
 
     let cleanupSimulationEvents: (() => void) | undefined;
-    if (logic && logic.attachEvents && simulator) {
+    if (running && logic && logic.attachEvents && simulator) {
       // Helper to find Arduino pin connected to a component pin.
-      // Traces through passive components (resistors) so that a circuit like
-      //   LED-cathode → resistor → GND  returns -1 (GND) instead of null.
+      // Traces through passive components (resistors, breadboard) so that a
+      // circuit like:  LED-anode → breadboard-5a → breadboard-5e → Arduino-13
+      // correctly returns pin 13.
       const getArduinoPin = (componentPinName: string): number | null => {
         const state = useSimulatorStore.getState();
 
-        // Passive component metadataIds that are electrically transparent.
-        const PASSIVE = new Set(['resistor', 'resistor-us']);
+        // Simple 2-pin passives: pin '1' ↔ pin '2'
+        const SIMPLE_PASSIVE = new Set(['resistor', 'resistor-us']);
+
+        const powerFromBattery = (componentId: string, pinName: string): number | null => {
+          const comp = state.components.find((c) => c.id === componentId);
+          if (comp?.metadataId !== 'battery-9v') return null;
+          if (!battery9vBothTerminalsWired(state.wires, componentId)) return null;
+          if (pinName === 'GND') return SIM_PIN_GND;
+          if (pinName === 'VCC') return SIM_PIN_VCC;
+          return null;
+        };
+
+        /** boardPinToNumber uses -1 for every non-GPIO rail; split GND vs positive supplies. */
+        const railFromBoardPinName = (pinName: string): number | null => {
+          const n = pinName.toUpperCase();
+          if (n.startsWith('GND')) return SIM_PIN_GND;
+          if (n === 'VSS') return SIM_PIN_GND;
+          if (n.startsWith('5V') || n.startsWith('3V3') || n.startsWith('3.3V')) return SIM_PIN_VCC;
+          if (n.startsWith('VIN') || n.startsWith('VCC') || n.startsWith('VSYS') || n.startsWith('VBUS')) {
+            return SIM_PIN_VCC;
+          }
+          return null;
+        };
+
+        // --- Breadboard internal connectivity ---
+        // Given an entry pin name, return all electrically-connected pin names
+        // within the same breadboard node (column-row group or power rail).
+        const breadboardConnectedPins = (enterPin: string): string[] => {
+          const COLS = 30;
+          // Top power rail +
+          if (/^tp\d+\+$/.test(enterPin))
+            return Array.from({ length: COLS }, (_, i) => `tp${i + 1}+`).filter(p => p !== enterPin);
+          // Top power rail -
+          if (/^tp\d+-$/.test(enterPin))
+            return Array.from({ length: COLS }, (_, i) => `tp${i + 1}-`).filter(p => p !== enterPin);
+          // Bottom power rail +
+          if (/^bp\d+\+$/.test(enterPin))
+            return Array.from({ length: COLS }, (_, i) => `bp${i + 1}+`).filter(p => p !== enterPin);
+          // Bottom power rail -
+          if (/^bp\d+-$/.test(enterPin))
+            return Array.from({ length: COLS }, (_, i) => `bp${i + 1}-`).filter(p => p !== enterPin);
+          // Main rows: {col}{row}  e.g. '5a', '12f'
+          const m = /^(\d+)([a-j])$/.exec(enterPin);
+          if (m) {
+            const col = m[1];
+            const row = m[2];
+            const topBlock = ['a', 'b', 'c', 'd', 'e'];
+            const botBlock = ['f', 'g', 'h', 'i', 'j'];
+            const block = topBlock.includes(row) ? topBlock : botBlock;
+            return block.filter(r => r !== row).map(r => `${col}${r}`);
+          }
+          return [];
+        };
 
         // Depth-limited BFS: trace from (fromId, fromPin) through wires,
         // traversing through passive components to reach a board pin.
         const trace = (fromId: string, fromPin: string, depth: number): number | null => {
-          if (depth > 6) return null;
+          if (depth > 12) return null;
 
           const wires = state.wires.filter(
             w => (w.start.componentId === fromId && w.start.pinName === fromPin) ||
@@ -228,19 +278,36 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
             const otherEp = selfEp === w.start ? w.end : w.start;
 
             if (isBoardComponent(otherEp.componentId)) {
-              // Direct board connection
               const boardKind = state.boards.find((b) => b.id === otherEp.componentId)?.boardKind
                 ?? otherEp.componentId;
               const pin = boardPinToNumber(boardKind, otherEp.pinName);
-              if (pin !== null) return pin;
+              if (pin !== null && pin >= 0) return pin;
+              if (pin === -1) {
+                const rail = railFromBoardPinName(otherEp.pinName);
+                if (rail !== null) return rail;
+              }
+              continue;
             } else {
-              // Intermediate passive component — traverse through it
               const comp = state.components.find(c => c.id === otherEp.componentId);
-              if (comp && PASSIVE.has(comp.metadataId)) {
-                // Resistors have two pins; find the other one to continue tracing
+              if (!comp) continue;
+
+              const batt = powerFromBattery(otherEp.componentId, otherEp.pinName);
+              if (batt !== null) return batt;
+
+              if (SIMPLE_PASSIVE.has(comp.metadataId)) {
+                // Resistors: pin '1' ↔ pin '2'
                 const otherPin = otherEp.pinName === '1' ? '2' : '1';
                 const result = trace(otherEp.componentId, otherPin, depth + 1);
                 if (result !== null) return result;
+
+              } else if (comp.metadataId === 'breadboard') {
+                // Breadboard: entry pin connects to all pins in the same node
+                // (same column+block for rows, or entire rail for power pins).
+                const exits = breadboardConnectedPins(otherEp.pinName);
+                for (const exitPin of exits) {
+                  const result = trace(otherEp.componentId, exitPin, depth + 1);
+                  if (result !== null) return result;
+                }
               }
             }
           }
@@ -259,7 +326,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
       el.removeEventListener('button-press', onButtonPress);
       el.removeEventListener('button-release', onButtonRelease);
     };
-  }, [id, handleComponentEvent, metadata.id, simulator, hexEpoch, wireFingerprint]);
+  }, [id, handleComponentEvent, metadata.id, simulator, hexEpoch, wireFingerprint, running]);
 
   return (
     <div

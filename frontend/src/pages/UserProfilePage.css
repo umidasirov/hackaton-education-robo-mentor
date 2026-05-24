@@ -1,5 +1,4 @@
 .profile-page {
-  min-height: 100vh;
   background: var(--bg);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
@@ -161,4 +160,168 @@
   .profile-container { padding: 32px 20px; }
   .profile-header { flex-wrap: wrap; }
   .profile-username { font-size: 24px; }
+}
+
+
+.profile-card {
+  position: relative; /* O'chirish tugmasi uchun kerak */
+  transition: opacity 0.3s ease;
+}
+
+.profile-card.deleting {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.profile-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4d4d;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0; /* Odatiy holatda yashirin */
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.profile-card:hover .profile-delete-btn {
+  opacity: 1; /* Hover bo'lganda ko'rinadi */
+}
+
+.profile-delete-btn:hover {
+  background: #ff4d4d;
+  color: white;
+}
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.18s ease;
+}
+
+.delete-modal {
+  width: 100%;
+  max-width: 420px;
+  background: #111827;
+  border-radius: 18px;
+  padding: 24px;
+  color: #fff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  animation: modalScale 0.2s ease;
+}
+
+.delete-modal-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.delete-modal h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.delete-modal p {
+  margin: 0;
+  color: #9ca3af;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.delete-modal p b {
+  color: #fff;
+}
+
+.delete-modal-error {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  font-size: 13px;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.delete-modal-cancel,
+.delete-modal-confirm {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.delete-modal-cancel {
+  background: #1f2937;
+  color: #d1d5db;
+}
+
+.delete-modal-cancel:hover {
+  background: #374151;
+}
+
+.delete-modal-confirm {
+  background: #ef4444;
+  color: white;
+}
+
+.delete-modal-confirm:hover {
+  background: #dc2626;
+}
+
+.delete-modal-cancel:disabled,
+.delete-modal-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

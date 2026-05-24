@@ -8,7 +8,7 @@ import { getSeoMeta } from '../seoRoutes';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import './LandingPage.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/vexio';
 const PAYPAL_URL = 'https://paypal.me/odoonext';
 const GITHUB_SPONSORS_URL = 'https://github.com/sponsors/davidmonterocrespo24';
 
@@ -96,7 +96,7 @@ const CircuitSchematic = () => (
     <path d="M398.5,260 L398.5,268.5 L390,268.5" fill="none" stroke="#0d2a0d" strokeWidth="1" />
 
     {/* Silkscreen header */}
-    <text x="12" y="14" fill="#092010" fontFamily="monospace" fontSize="6.5" letterSpacing="0.8">VELXIO BLINK DEMO</text>
+    <text x="12" y="14" fill="#092010" fontFamily="monospace" fontSize="6.5" letterSpacing="0.8">vexio BLINK DEMO</text>
     <text x="388" y="14" textAnchor="end" fill="#092010" fontFamily="monospace" fontSize="6.5" letterSpacing="0.5">REV 1.0</text>
 
     {/* ── ARDUINO UNO BLOCK ── */}
@@ -244,7 +244,7 @@ const CircuitSchematic = () => (
 
     {/* Bottom silkscreen */}
     <text x="12" y="263" fill="#092010" fontFamily="monospace" fontSize="6" letterSpacing="0.5">MIT LICENSE</text>
-    <text x="388" y="263" textAnchor="end" fill="#092010" fontFamily="monospace" fontSize="6">velxio.dev</text>
+    <text x="388" y="263" textAnchor="end" fill="#092010" fontFamily="monospace" fontSize="6">vexio.dev</text>
   </svg>
 );
 
@@ -445,34 +445,34 @@ export const LandingPage: React.FC = () => {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'Is Velxio free?',
+          name: 'Is vexio free?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Velxio is completely free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription. Run it at velxio.dev or self-host with one Docker command.',
+            text: 'Yes. vexio is completely free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription. Run it at vexio.dev or self-host with one Docker command.',
           },
         },
         {
           '@type': 'Question',
-          name: 'Does Velxio work offline?',
+          name: 'Does vexio work offline?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Velxio can be self-hosted via Docker. Once running, the simulation engine works fully offline in the browser. Compilation requires the local arduino-cli backend.',
+            text: 'vexio can be self-hosted via Docker. Once running, the simulation engine works fully offline in the browser. Compilation requires the local arduino-cli backend.',
           },
         },
         {
           '@type': 'Question',
-          name: 'What boards does Velxio support?',
+          name: 'What boards does vexio support?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Velxio supports 19 boards across 5 CPU architectures: AVR8 (Arduino Uno, Nano, Mega 2560, ATtiny85, Leonardo, Pro Mini), RP2040 (Raspberry Pi Pico, Pico W), RISC-V (ESP32-C3, XIAO ESP32-C3, CH32V003), Xtensa QEMU (ESP32, ESP32-S3, ESP32-CAM, Nano ESP32), and ARM Cortex-A53 QEMU (Raspberry Pi 3B running Linux).',
+            text: 'vexio supports 19 boards across 5 CPU architectures: AVR8 (Arduino Uno, Nano, Mega 2560, ATtiny85, Leonardo, Pro Mini), RP2040 (Raspberry Pi Pico, Pico W), RISC-V (ESP32-C3, XIAO ESP32-C3, CH32V003), Xtensa QEMU (ESP32, ESP32-S3, ESP32-CAM, Nano ESP32), and ARM Cortex-A53 QEMU (Raspberry Pi 3B running Linux).',
           },
         },
         {
           '@type': 'Question',
-          name: 'Is Velxio a Wokwi alternative?',
+          name: 'Is vexio a Wokwi alternative?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Velxio is a free, self-hosted alternative to Wokwi. It uses the same avr8js and wokwi-elements open-source libraries but runs entirely on your machine with no cloud dependency.',
+            text: 'Yes. vexio is a free, self-hosted alternative to Wokwi. It uses the same avr8js and wokwi-elements open-source libraries but runs entirely on your machine with no cloud dependency.',
           },
         },
       ],
@@ -511,7 +511,7 @@ export const LandingPage: React.FC = () => {
         <div className="hero-right">
           <picture>
             <source srcSet="/image.webp" type="image/webp" />
-            <img src="/image.png" alt="Velxio simulator preview" className="hero-preview-img" loading="lazy" />
+            <img src="/image.png" alt="vexio simulator preview" className="hero-preview-img" loading="lazy" />
           </picture>
         </div>
       </section>
@@ -715,7 +715,7 @@ export const LandingPage: React.FC = () => {
           <div className="support-icon"><IcoSponsor /></div>
           <h2 className="support-title">Support the project</h2>
           <p className="support-sub">
-            Velxio is free and open source. If it saves you time, consider supporting its development.
+            vexio is free and open source. If it saves you time, consider supporting its development.
           </p>
           <div className="support-btns">
             <a href={GITHUB_SPONSORS_URL} target="_blank" rel="noopener noreferrer" className="support-btn support-btn-gh">
@@ -735,7 +735,7 @@ export const LandingPage: React.FC = () => {
       <footer className="landing-footer">
         <div className="footer-brand">
           <IcoChip />
-          <span>Velxio</span>
+          <span>vexio</span>
         </div>
         <div className="footer-links">
           <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={trackVisitGitHub}>GitHub</a>

@@ -1,7 +1,6 @@
 /* ── SEOPage.css — Shared layout for keyword-targeted landing pages ── */
 
 .seo-page {
-  min-height: 100vh;
   background: #0d0d0f;
   color: #e6edf3;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

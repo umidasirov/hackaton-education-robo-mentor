@@ -673,7 +673,7 @@ void drawStaticUI() {
   tft.setTextSize(3);
   tft.setTextColor(tft.color565(255, 220, 0));
   tft.setCursor(20, 10);
-  tft.print("VELXIO TFT");
+  tft.print("vexio TFT");
 
   // Subtitle
   tft.setTextSize(2);
@@ -763,7 +763,7 @@ void setup() {
   // Print a message to the LCD.
   lcd.print("Hello, Arduino!");
   lcd.setCursor(0, 1);
-  lcd.print("Velxio Emulator");
+  lcd.print("vexio Emulator");
   lcd.setCursor(0, 2);
   lcd.print("LCD 2004 Test");
 }
@@ -4196,7 +4196,7 @@ void loop() {
   {
     id: 'esp32c3-wifi-scan',
     title: 'ESP32-C3 WiFi Scan',
-    description: 'Scan for available WiFi networks on the ESP32-C3 (RISC-V). The emulated ESP32-C3 will find the "Velxio-GUEST" access point.',
+    description: 'Scan for available WiFi networks on the ESP32-C3 (RISC-V). The emulated ESP32-C3 will find the "vexio-GUEST" access point.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32-c3',
@@ -4242,14 +4242,14 @@ void loop() {
   {
     id: 'esp32c3-wifi-connect',
     title: 'ESP32-C3 WiFi Connect',
-    description: 'Connect the ESP32-C3 to the virtual "Velxio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
+    description: 'Connect the ESP32-C3 to the virtual "vexio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32-c3',
     boardFilter: 'esp32-c3',
     code: `#include <WiFi.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "vexio-GUEST";
 
 void setup() {
   Serial.begin(115200);
@@ -4296,7 +4296,7 @@ void loop() {
     code: `#include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "vexio-GUEST";
 WebServer server(80);
 
 int requestCount = 0;
@@ -4312,7 +4312,7 @@ void handleRoot() {
   html += ".card{background:#16213e;padding:20px;border-radius:10px;margin:10px 0}";
   html += ".stat{color:#00d4ff;font-size:1.2em}</style></head><body>";
   html += "<h1>Hello from ESP32-C3!</h1>";
-  html += "<div class='card'><p>This page is served by an ESP32-C3 (RISC-V) running in the Velxio simulator.</p>";
+  html += "<div class='card'><p>This page is served by an ESP32-C3 (RISC-V) running in the vexio simulator.</p>";
   html += "<p>Requests served: <span class='stat'>" + String(requestCount) + "</span></p>";
   html += "<p>Uptime: <span class='stat'>" + String(millis() / 1000) + "s</span></p>";
   html += "<p>Free heap: <span class='stat'>" + String(ESP.getFreeHeap()) + " bytes</span></p>";
@@ -4393,7 +4393,7 @@ void setup() {
   Serial.println("BLE init is detected but communication is not emulated.");
   Serial.println();
 
-  BLEDevice::init("Velxio-ESP32C3");
+  BLEDevice::init("vexio-ESP32C3");
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
@@ -4405,7 +4405,7 @@ void setup() {
     BLECharacteristic::PROPERTY_NOTIFY
   );
   pCharacteristic->addDescriptor(new BLE2902());
-  pCharacteristic->setValue("Hello from Velxio C3!");
+  pCharacteristic->setValue("Hello from vexio C3!");
 
   pService->start();
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -4414,7 +4414,7 @@ void setup() {
   pAdvertising->start();
 
   Serial.println("BLE advertising started!");
-  Serial.println("Device name: Velxio-ESP32C3");
+  Serial.println("Device name: vexio-ESP32C3");
   Serial.printf("Service UUID: %s\\n", SERVICE_UUID);
 }
 
@@ -4438,7 +4438,7 @@ void loop() {
   {
     id: 'esp32-wifi-scan',
     title: 'ESP32 WiFi Scan',
-    description: 'Scan for available WiFi networks and display them in Serial Monitor. The emulated ESP32 will find the "Velxio-GUEST" access point.',
+    description: 'Scan for available WiFi networks and display them in Serial Monitor. The emulated ESP32 will find the "vexio-GUEST" access point.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32',
@@ -4484,14 +4484,14 @@ void loop() {
   {
     id: 'esp32-wifi-connect',
     title: 'ESP32 WiFi Connect',
-    description: 'Connect to the virtual "Velxio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
+    description: 'Connect to the virtual "vexio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32',
     boardFilter: 'esp32',
     code: `#include <WiFi.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "vexio-GUEST";
 
 void setup() {
   Serial.begin(115200);
@@ -4538,7 +4538,7 @@ void loop() {
     code: `#include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "vexio-GUEST";
 WebServer server(80);
 
 int requestCount = 0;
@@ -4554,7 +4554,7 @@ void handleRoot() {
   html += ".card{background:#16213e;padding:20px;border-radius:10px;margin:10px 0}";
   html += ".stat{color:#00d4ff;font-size:1.2em}</style></head><body>";
   html += "<h1>Hello from ESP32!</h1>";
-  html += "<div class='card'><p>This page is served by an ESP32 running in the Velxio simulator.</p>";
+  html += "<div class='card'><p>This page is served by an ESP32 running in the vexio simulator.</p>";
   html += "<p>Requests served: <span class='stat'>" + String(requestCount) + "</span></p>";
   html += "<p>Uptime: <span class='stat'>" + String(millis() / 1000) + "s</span></p>";
   html += "<p>Free heap: <span class='stat'>" + String(ESP.getFreeHeap()) + " bytes</span></p>";
@@ -4636,7 +4636,7 @@ void setup() {
   Serial.println("is not emulated in the simulator.");
   Serial.println();
 
-  BLEDevice::init("Velxio-ESP32");
+  BLEDevice::init("vexio-ESP32");
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
@@ -4648,7 +4648,7 @@ void setup() {
     BLECharacteristic::PROPERTY_NOTIFY
   );
   pCharacteristic->addDescriptor(new BLE2902());
-  pCharacteristic->setValue("Hello from Velxio!");
+  pCharacteristic->setValue("Hello from vexio!");
 
   pService->start();
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -4657,7 +4657,7 @@ void setup() {
   pAdvertising->start();
 
   Serial.println("BLE advertising started!");
-  Serial.println("Device name: Velxio-ESP32");
+  Serial.println("Device name: vexio-ESP32");
   Serial.printf("Service UUID: %s\\n", SERVICE_UUID);
 }
 
@@ -4767,7 +4767,7 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("vexio!");
   display.display();
   Serial.println("OLED ready!");
 }
@@ -4779,7 +4779,7 @@ void loop() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("vexio!");
   display.setTextSize(1);
   display.setCursor(0, 48);
   display.printf("Count: %d", counter);

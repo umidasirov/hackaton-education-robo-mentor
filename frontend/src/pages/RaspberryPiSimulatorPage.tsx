@@ -46,7 +46,7 @@ const JSON_LD: object[] = [
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online Raspberry Pi 3 simulator with full ARM Cortex-A53 Linux emulation via QEMU. Run Python, bash, and RPi.GPIO in your browser — no Raspberry Pi hardware needed.',
-    url: 'https://velxio.dev/raspberry-pi-simulator',
+    url: 'https://simulyator.adxamov.uz/raspberry-pi-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
   },
@@ -63,8 +63,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'Raspberry Pi Simulator', item: 'https://velxio.dev/raspberry-pi-simulator' },
+      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://simulyator.adxamov.uz/' },
+      { '@type': 'ListItem', position: 2, name: 'Raspberry Pi Simulator', item: 'https://simulyator.adxamov.uz/raspberry-pi-simulator' },
     ],
   },
 ];

@@ -19,7 +19,7 @@ export class ComponentRegistry {
   private loaded = false;
   private _loadPromise: Promise<void> | null = null;
 
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Get singleton instance
@@ -74,6 +74,21 @@ export class ComponentRegistry {
         defaultValues: {},
         pinCount: 40,
         tags: ['raspberry', 'pi', 'rp3', 'board', 'qemu', 'linux']
+      });
+      data.components.push({
+        id: 'battery-9v',
+        tagName: 'wokwi-battery-9v',
+        name: '9V Battery',
+        category: 'passive',
+        description: '9V PP3 model: both terminals must be wired for the pack to be active; nominal 9V (simulation updates only while Run is on).',
+        thumbnail: '<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="8" width="28" height="48" rx="4" fill="#2a2a2a"/><rect x="22" y="20" width="20" height="22" rx="2" fill="#e8dfc8"/><text x="32" y="35" text-anchor="middle" font-size="10" font-weight="700" fill="#c62828">9V</text><circle cx="26" cy="6" r="4" fill="#c9a227"/><circle cx="38" cy="6" r="4" fill="#c9a227"/></svg>',
+        properties: [
+          { name: 'voltage', type: 'string', defaultValue: '9V', control: 'text' },
+          { name: 'label', type: 'string', defaultValue: 'Battery', control: 'text' },
+        ],
+        defaultValues: { voltage: '9V', label: 'Battery' },
+        pinCount: 2,
+        tags: ['battery', '9v', 'power', 'source', 'pp3']
       });
 
       this.processMetadata(data.components);
@@ -189,5 +204,7 @@ export class ComponentRegistry {
 // Auto-load on module import
 const registry = ComponentRegistry.getInstance();
 registry.load();
+
+
 
 export default registry;

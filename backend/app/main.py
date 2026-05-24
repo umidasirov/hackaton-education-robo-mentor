@@ -18,6 +18,7 @@ from app.api.routes import compile, libraries
 from app.api.routes.admin import router as admin_router
 from app.api.routes.auth import router as auth_router
 from app.api.routes.projects import router as projects_router
+from app.api.routes.ai_tutor import router as ai_tutor_router
 from app.core.config import settings
 from app.database.session import Base, async_engine
 
@@ -70,6 +71,7 @@ app.include_router(libraries.router, prefix="/api/libraries", tags=["libraries"]
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.include_router(projects_router, prefix="/api", tags=["projects"])
 app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
+app.include_router(ai_tutor_router, tags=["ai-tutor"])
 
 # WebSockets
 from app.api.routes import simulation

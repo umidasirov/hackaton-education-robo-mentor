@@ -22,7 +22,10 @@ class ArduinoCLIService:
         "esp32": "esp32:esp32",
     }
 
-    def __init__(self, cli_path: str = "arduino-cli"):
+    def __init__(self, cli_path: str = None):
+        if cli_path is None:
+            # Default to the bundled arduino-cli in the backend/bin directory
+            cli_path = str(Path(__file__).parent.parent.parent / "bin" / "arduino-cli")
         self.cli_path = cli_path
         self._ensure_board_urls()
         self._ensure_core_installed()

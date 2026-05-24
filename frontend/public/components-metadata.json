@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-04-14T17:00:25.789Z",
+  "generatedAt": "2026-04-19T01:53:38.718Z",
   "components": [
     {
       "id": "arduino-mega",
@@ -390,7 +390,7 @@
       "tagName": "wokwi-potentiometer",
       "name": "Potentiometer",
       "category": "input",
-      "thumbnail": "<svg width=\"64\" height=\"64\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"64\" height=\"64\" fill=\"#e0e0e0\" rx=\"4\"/>\n      <text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" font-size=\"10\" fill=\"#666\">\n        POTENTIOMETER\n      </text>\n    </svg>",
+      "thumbnail": "<svg width=\"64\" height=\"64\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"64\" height=\"64\" fill=\"#e3f2fd\" rx=\"6\"/><circle cx=\"32\" cy=\"26\" r=\"16\" fill=\"#26a5d9\" stroke=\"#156fa0\"/><rect x=\"14\" y=\"44\" width=\"6\" height=\"14\" rx=\"1\" fill=\"#bdbdbd\"/><rect x=\"29\" y=\"44\" width=\"6\" height=\"14\" rx=\"1\" fill=\"#bdbdbd\"/><rect x=\"44\" y=\"44\" width=\"6\" height=\"14\" rx=\"1\" fill=\"#bdbdbd\"/></svg>",
       "properties": [
         {
           "name": "min",
@@ -437,7 +437,7 @@
         "startDegree": -135,
         "endDegree": 135
       },
-      "pinCount": 0,
+      "pinCount": 3,
       "tags": [
         "potentiometer"
       ]
@@ -1726,20 +1726,23 @@
       ]
     },
     {
-      "id": "bmp280",
-      "tagName": "wokwi-bmp280",
-      "name": "BMP280",
-      "category": "sensors",
-      "description": "BMP280 barometric pressure and temperature sensor (I2C). Pins: VCC, GND, SDA, SCL.",
-      "thumbnail": "<svg width=\"64\" height=\"64\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"64\" height=\"64\" fill=\"#2d6a2d\" rx=\"4\"/><rect x=\"16\" y=\"20\" width=\"32\" height=\"24\" rx=\"2\" fill=\"#111\"/><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" font-size=\"9\" fill=\"#aaa\">BMP280</text></svg>",
-      "properties": [
-        { "name": "temperature", "type": "string", "defaultValue": "25", "control": "text" },
-        { "name": "pressure", "type": "string", "defaultValue": "1013.25", "control": "text" },
-        { "name": "address", "type": "string", "defaultValue": "0x76", "control": "text" }
-      ],
-      "defaultValues": { "temperature": "25", "pressure": "1013.25", "address": "0x76" },
-      "pinCount": 4,
-      "tags": ["bmp280", "barometric", "i2c", "pressure", "temperature", "sensor"]
+      "id": "breadboard",
+      "tagName": "wokwi-breadboard",
+      "name": "Breadboard",
+      "category": "passive",
+      "description": "400-tie solderless breadboard with power rails. 30 columns × 10 rows (a–j) + top/bottom ± rails.",
+      "thumbnail": "<svg width=\"64\" height=\"64\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"64\" height=\"64\" rx=\"4\" fill=\"#d4c9a8\"/>\n  <rect x=\"1\" y=\"5\" width=\"62\" height=\"8\" rx=\"2\" fill=\"#b8b0a0\"/>\n  <line x1=\"4\" y1=\"8\" x2=\"60\" y2=\"8\" stroke=\"#e74c3c\" stroke-width=\"1.5\" opacity=\"0.7\"/>\n  <rect x=\"4\" y=\"16\" width=\"56\" height=\"15\" rx=\"1\" fill=\"#c8be9e\"/>\n  <rect x=\"4\" y=\"33\" width=\"56\" height=\"15\" rx=\"1\" fill=\"#c8be9e\"/>\n  <rect x=\"1\" y=\"51\" width=\"62\" height=\"8\" rx=\"2\" fill=\"#b8b0a0\"/>\n  <line x1=\"4\" y1=\"54\" x2=\"60\" y2=\"54\" stroke=\"#3498db\" stroke-width=\"1.5\" opacity=\"0.7\"/>\n  <g fill=\"#2a2a2a\">\n    <rect x=\"7\"  y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"14\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"21\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"28\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"35\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"42\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"49\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"56\" y=\"19\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"7\"  y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"14\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"21\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"28\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"35\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"42\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"49\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"56\" y=\"26\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"7\"  y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"14\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"21\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"28\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"35\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"42\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"49\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"56\" y=\"36\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"7\"  y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"14\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"21\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"28\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"35\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"42\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"49\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n    <rect x=\"56\" y=\"43\" width=\"4\" height=\"4\" rx=\"1\"/>\n  </g>\n</svg>",
+      "properties": [],
+      "defaultValues": {},
+      "pinCount": 0,
+      "tags": [
+        "breadboard",
+        "solderless",
+        "prototype",
+        "passive",
+        "rails",
+        "jumper"
+      ]
     }
   ]
 }

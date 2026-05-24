@@ -2,10 +2,71 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { CodeBlock } from '../components/layout/CodeBlock';
+import { LedSection } from './docs-sections/LedSection';
+import { UltrasonicSection } from './docs-sections/UltrasonicSection';
+import { ServoSection } from './docs-sections/ServoSection';
+import { Dht22Section } from './docs-sections/Dht22Section';
+import { PirSection } from './docs-sections/PirSection';
+import { BuzzerSection } from './docs-sections/BuzzerSection';
+import { loadExample } from '../utils/loadExample';
+import { docsExamples } from '../data/docs-examples';
 import './DocsPage.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
-const BASE_URL = 'https://velxio.dev';
+/**
+ * "Simulyatorda ko'rish" tugmasi — bosilganda tayyor loyihani
+ * (komponentlar + simlar + kod) simulyatorga yuklaydi va editor'ga o'tadi.
+ */
+const SimButton: React.FC<{ exampleKey: string; label?: string }> = ({
+  exampleKey,
+  label = '🚀 Simulyatorda ko\'rish',
+}) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+
+  const handleClick = async () => {
+    const example = docsExamples[exampleKey];
+    if (!example) return;
+    setLoading(true);
+    try {
+      await loadExample(example);
+      navigate('/editor');
+    } catch {
+      setLoading(false);
+    }
+  };
+
+  if (!docsExamples[exampleKey]) return null;
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={loading}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '10px 20px',
+        margin: '16px 0',
+        background: 'var(--accent, #0071e3)',
+        color: '#fff',
+        border: 'none',
+        borderRadius: 10,
+        fontSize: 14,
+        fontWeight: 600,
+        cursor: loading ? 'wait' : 'pointer',
+        opacity: loading ? 0.7 : 1,
+        transition: 'opacity 0.15s, transform 0.15s',
+      }}
+      onMouseEnter={(e) => ((e.target as HTMLElement).style.transform = 'translateY(-1px)')}
+      onMouseLeave={(e) => ((e.target as HTMLElement).style.transform = 'translateY(0)')}
+    >
+      {loading ? 'Yuklanmoqda...' : label}
+    </button>
+  );
+};
+
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/RoboMentor';
+const BASE_URL = 'https://RoboMentor.dev';
 const AUTHOR = { '@type': 'Person', name: 'David Montero Crespo', url: 'https://github.com/davidmonterocrespo24' } as const;
 
 /* ── Icons ─────────────────────────────────────────────── */
@@ -25,6 +86,12 @@ type SectionId =
   | 'rp2040-emulation'
   | 'raspberry-pi3-emulation'
   | 'components'
+  | 'comp-led'
+  | 'comp-ultrasonic'
+  | 'comp-servo'
+  | 'comp-dht22'
+  | 'comp-pir'
+  | 'comp-buzzer'
   | 'roadmap'
   | 'architecture'
   | 'wokwi-libs'
@@ -39,7 +106,7 @@ const VALID_SECTIONS: SectionId[] = [
   'esp32-emulation',
   'rp2040-emulation',
   'raspberry-pi3-emulation',
-  'components',
+  'components', 'comp-led', 'comp-ultrasonic', 'comp-servo', 'comp-dht22', 'comp-pir', 'comp-buzzer',
   'roadmap',
   'architecture',
   'wokwi-libs',
@@ -60,7 +127,13 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'esp32-emulation', label: 'ESP32 Emulation (Xtensa)' },
   { id: 'rp2040-emulation', label: 'RP2040 Emulation (Raspberry Pi Pico)' },
   { id: 'raspberry-pi3-emulation', label: 'Raspberry Pi 3 Emulation (QEMU)' },
-  { id: 'components', label: 'Components Reference' },
+  { id: 'components', label: '📦 Komponentlar' },
+  { id: 'comp-led', label: '  💡 LED' },
+  { id: 'comp-ultrasonic', label: '  📡 Ultrasonik (HC-SR04)' },
+  { id: 'comp-dht22', label: '  🌡️ DHT22 harorat' },
+  { id: 'comp-pir', label: '  👁️ PIR harakat' },
+  { id: 'comp-servo', label: '  ⚙️ Servo motor' },
+  { id: 'comp-buzzer', label: '  🔊 Buzzer' },
   { id: 'architecture', label: 'Project Architecture' },
   { id: 'wokwi-libs', label: 'Wokwi Libraries' },
   { id: 'mcp', label: 'MCP Server' },
@@ -72,56 +145,80 @@ const NAV_ITEMS: NavItem[] = [
 interface SectionMeta { title: string; description: string; }
 const SECTION_META: Record<SectionId, SectionMeta> = {
   'intro': {
-    title: 'Introduction | Velxio Documentation',
-    description: 'Learn about Velxio, the free open-source Arduino emulator with real AVR8 and RP2040 CPU emulation and 48+ interactive electronic components.',
+    title: 'Introduction | RoboMentor Documentation',
+    description: 'Learn about RoboMentor, the free open-source Arduino emulator with real AVR8 and RP2040 CPU emulation and 48+ interactive electronic components.',
   },
   'getting-started': {
-    title: 'Getting Started | Velxio Documentation',
-    description: 'Get started with Velxio: use the hosted editor, self-host with Docker, or set up a local development environment. Simulate your first Arduino sketch in minutes.',
+    title: 'Getting Started | RoboMentor Documentation',
+    description: 'Get started with RoboMentor: use the hosted editor, self-host with Docker, or set up a local development environment. Simulate your first Arduino sketch in minutes.',
   },
   'emulator': {
-    title: 'Emulator Architecture | Velxio Documentation',
-    description: 'How Velxio emulates AVR8 (ATmega328p), RP2040, and RISC-V (ESP32-C3) CPUs. Covers execution loops, peripherals, and pin mapping for all supported boards.',
+    title: 'Emulator Architecture | RoboMentor Documentation',
+    description: 'How RoboMentor emulates AVR8 (ATmega328p), RP2040, and RISC-V (ESP32-C3) CPUs. Covers execution loops, peripherals, and pin mapping for all supported boards.',
   },
   'riscv-emulation': {
-    title: 'RISC-V Emulation (ESP32-C3) | Velxio Documentation',
+    title: 'RISC-V Emulation (ESP32-C3) | RoboMentor Documentation',
     description: 'Browser-side RV32IMC emulator for ESP32-C3, XIAO ESP32-C3, and C3 SuperMini. Covers memory map, GPIO, UART0, the ESP32 image parser, RV32IMC ISA, and test suite.',
   },
   'esp32-emulation': {
-    title: 'ESP32 Emulation (Xtensa) | Velxio Documentation',
+    title: 'ESP32 Emulation (Xtensa) | RoboMentor Documentation',
     description: 'QEMU-based emulation for ESP32 and ESP32-S3 (Xtensa LX6/LX7). Covers the lcgamboa fork, libqemu-xtensa, GPIO, WiFi, I2C, SPI, RMT/NeoPixel, and LEDC/PWM.',
   },
   'components': {
-    title: 'Components Reference | Velxio Documentation',
-    description: 'Full reference for all 48+ interactive electronic components in Velxio: LEDs, displays, sensors, buttons, potentiometers, and more. Includes wiring and property details.',
+    title: 'Komponentlar | RoboMentor Hujjatlar',
+    description: 'RoboMentor platformasidagi 48+ interaktiv elektronika komponentlari.',
+  },
+  'comp-led': {
+    title: 'LED | RoboMentor Hujjatlar',
+    description: 'LED (yorituvchi diod) haqida to\'liq ma\'lumot, ishlash prinsipi va Arduino bilan ulash.',
+  },
+  'comp-ultrasonic': {
+    title: 'HC-SR04 Ultrasonik | RoboMentor Hujjatlar',
+    description: 'HC-SR04 ultrasonik masofa sensori — ishlash prinsipi, ulanish va kod.',
+  },
+  'comp-servo': {
+    title: 'Servo motor | RoboMentor Hujjatlar',
+    description: 'Servomotor boshqarish — SG90, MG995, PWM prinsipi.',
+  },
+  'comp-dht22': {
+    title: 'DHT22 | RoboMentor Hujjatlar',
+    description: 'DHT22 harorat va namlik sensori — ulanish va ishlatish.',
+  },
+  'comp-pir': {
+    title: 'PIR sensori | RoboMentor Hujjatlar',
+    description: 'PIR HC-SR501 harakat sensori — ishlash prinsipi va loyihalar.',
+  },
+  'comp-buzzer': {
+    title: 'Buzzer | RoboMentor Hujjatlar',
+    description: 'Full reference for all 48+ interactive electronic components in RoboMentor: LEDs, displays, sensors, buttons, potentiometers, and more. Includes wiring and property details.',
   },
   'roadmap': {
-    title: 'Roadmap | Velxio Documentation',
-    description: "Velxio's feature roadmap: what's implemented, what's in progress, and what's planned for future releases.",
+    title: 'Roadmap | RoboMentor Documentation',
+    description: "RoboMentor's feature roadmap: what's implemented, what's in progress, and what's planned for future releases.",
   },
   'architecture': {
-    title: 'Project Architecture | Velxio Documentation',
-    description: 'Detailed overview of the Velxio system architecture: frontend, backend, AVR8 emulation pipeline, data flows, Zustand stores, and wire system.',
+    title: 'Project Architecture | RoboMentor Documentation',
+    description: 'Detailed overview of the RoboMentor system architecture: frontend, backend, AVR8 emulation pipeline, data flows, Zustand stores, and wire system.',
   },
   'wokwi-libs': {
-    title: 'Wokwi Libraries | Velxio Documentation',
-    description: 'How Velxio integrates the official Wokwi open-source libraries: avr8js, wokwi-elements, and rp2040js. Covers configuration, updates, and the 48 available components.',
+    title: 'Wokwi Libraries | RoboMentor Documentation',
+    description: 'How RoboMentor integrates the official Wokwi open-source libraries: avr8js, wokwi-elements, and rp2040js. Covers configuration, updates, and the 48 available components.',
   },
   'mcp': {
-    title: 'MCP Server | Velxio Documentation',
-    description: 'Velxio MCP Server reference: integrate AI agents (Claude, Cursor) with Velxio via Model Context Protocol. Covers tools, transports, circuit format, and example walkthroughs.',
+    title: 'MCP Server | RoboMentor Documentation',
+    description: 'RoboMentor MCP Server reference: integrate AI agents (Claude, Cursor) with RoboMentor via Model Context Protocol. Covers tools, transports, circuit format, and example walkthroughs.',
   },
   'setup': {
-    title: 'Project Status | Velxio Documentation',
-    description: 'Complete status of all implemented Velxio features: AVR emulation, component system, wire system, code editor, example projects, and next steps.',
+    title: 'Project Status | RoboMentor Documentation',
+    description: 'Complete status of all implemented RoboMentor features: AVR emulation, component system, wire system, code editor, example projects, and next steps.',
   },
   'rp2040-emulation': {
-    title: 'RP2040 Emulation (Raspberry Pi Pico) | Velxio Documentation',
-    description: 'How Velxio emulates the Raspberry Pi Pico and Pico W using rp2040js: ARM Cortex-M0+ at 133 MHz, GPIO, UART, ADC, I2C, SPI, PWM and WFI optimization.',
+    title: 'RP2040 Emulation (Raspberry Pi Pico) | RoboMentor Documentation',
+    description: 'How RoboMentor emulates the Raspberry Pi Pico and Pico W using rp2040js: ARM Cortex-M0+ at 133 MHz, GPIO, UART, ADC, I2C, SPI, PWM and WFI optimization.',
   },
   'raspberry-pi3-emulation': {
-    title: 'Raspberry Pi 3 Emulation (QEMU) | Velxio Documentation',
-    description: 'How Velxio emulates a full Raspberry Pi 3B using QEMU raspi3b: real Raspberry Pi OS, Python + RPi.GPIO shim, dual-channel UART, VFS, and multi-board serial bridge.',
+    title: 'Raspberry Pi 3 Emulation (QEMU) | RoboMentor Documentation',
+    description: 'How RoboMentor emulates a full Raspberry Pi 3B using QEMU raspi3b: real Raspberry Pi OS, Python + RPi.GPIO shim, dual-channel UART, VFS, and multi-board serial bridge.',
   },
 };
 
@@ -131,13 +228,13 @@ const IntroSection: React.FC = () => (
     <span className="docs-label">// overview</span>
     <h1>Introduction</h1>
     <p>
-      <strong>Velxio</strong> is a fully local, open-source Arduino emulator that runs entirely in your browser.
+      <strong>RoboMentor</strong> is a fully local, open-source Arduino emulator that runs entirely in your browser.
       Write Arduino C++ code, compile it with a real <code>arduino-cli</code> backend, and simulate it using
       true AVR8 / RP2040 CPU emulation, with 48+ interactive electronic components, all without installing
       any software on your machine.
     </p>
 
-    <h2>Why Velxio?</h2>
+    <h2>Why RoboMentor?</h2>
     <ul>
       <li><strong>No installation required</strong>: everything runs in the browser.</li>
       <li><strong>Real emulation</strong>: not a simplified model, but accurate AVR8 / RP2040 CPU emulation.</li>
@@ -162,7 +259,7 @@ const IntroSection: React.FC = () => (
 
     <div className="docs-callout">
       <strong>Live Demo:</strong>{' '}
-      <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer">velxio.dev</a>
+      <a href="https://RoboMentor.dev" target="_blank" rel="noopener noreferrer">RoboMentor.dev</a>
       {' '}, no installation needed, open the editor and start simulating immediately.
     </div>
   </div>
@@ -175,27 +272,22 @@ const GettingStartedSection: React.FC = () => (
     <p>Follow these steps to simulate your first Arduino sketch.</p>
 
     <h2>Option 1: Use the Hosted Version</h2>
-    <p>
-      No installation needed, go to{' '}
-      <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer">https://velxio.dev</a>{' '}
-      and start coding immediately.
-    </p>
 
     <h2>Option 2: Self-Host with Docker</h2>
     <p>Run a single Docker command to start a fully local instance:</p>
     <CodeBlock language="bash">{`docker run -d \\
-  --name velxio \\
+  --name RoboMentor \\
   -p 3080:80 \\
   -v $(pwd)/data:/app/data \\
-  ghcr.io/davidmonterocrespo24/velxio:master`}</CodeBlock>
+  ghcr.io/davidmonterocrespo24/RoboMentor:master`}</CodeBlock>
     <p>Then open <strong>http://localhost:3080</strong> in your browser.</p>
 
     <h2>Option 3: Manual Setup (Development)</h2>
     <p><strong>Prerequisites:</strong> Node.js 18+, Python 3.12+, <code>arduino-cli</code></p>
 
     <h3>1. Clone the repository</h3>
-    <CodeBlock language="bash">{`git clone https://github.com/davidmonterocrespo24/velxio.git
-cd velxio`}</CodeBlock>
+    <CodeBlock language="bash">{`git clone https://github.com/davidmonterocrespo24/RoboMentor.git
+cd RoboMentor`}</CodeBlock>
 
     <h3>2. Start the backend</h3>
     <CodeBlock language="bash">{`cd backend
@@ -220,7 +312,7 @@ arduino-cli core install rp2040:rp2040`}</CodeBlock>
 
     <h2>Your First Simulation</h2>
     <ol>
-      <li><strong>Open the editor</strong> at <a href="https://velxio.dev/editor" target="_blank" rel="noopener noreferrer">velxio.dev/editor</a>.</li>
+      <li><strong>Open the editor</strong> at <a href="https://simulyator.adxamov.uz/editor" target="_blank" rel="noopener noreferrer">RoboMentor.dev/editor</a>.</li>
       <li><strong>Select a board</strong> from the toolbar (e.g., <em>Arduino Uno</em>).</li>
       <li><strong>Write Arduino code</strong> in the Monaco editor, for example:</li>
     </ol>
@@ -273,7 +365,7 @@ const EmulatorSection: React.FC = () => (
     <span className="docs-label">// internals</span>
     <h1>Emulator Architecture</h1>
     <p>
-      Velxio uses <strong>real CPU emulation</strong> rather than a simplified model.
+      RoboMentor uses <strong>real CPU emulation</strong> rather than a simplified model.
       This document describes how each layer of the simulation works.
     </p>
 
@@ -374,108 +466,175 @@ cpu.tick();           // advance peripheral timers and counters`}</CodeBlock>
 
 const ComponentsSection: React.FC = () => (
   <div className="docs-section">
-    <span className="docs-label">// reference</span>
-    <h1>Components Reference</h1>
+    <span className="docs-label">// komponentlar</span>
+    <h1>Komponentlar va qurilmalar</h1>
     <p>
-      Velxio ships with <strong>48+ interactive electronic components</strong> powered by{' '}
-      <a href="https://github.com/wokwi/wokwi-elements" target="_blank" rel="noopener noreferrer">wokwi-elements</a>.
-      All components can be placed on the simulation canvas, connected with wires, and interact with your Arduino sketch in real time.
+      RoboMentor platformasida <strong>48+ interaktiv elektronika komponenti</strong> mavjud.
+      Har birini sxemaga qo'shish, simlar bilan ulash va Arduino kodi bilan boshqarish mumkin.
+      Quyida har bir komponent haqida batafsil ma'lumot, ishlatish usuli va tayyor misollar berilgan.
     </p>
 
-    <h2>Adding Components</h2>
-    <ol>
-      <li>Click the <strong>+</strong> button on the simulation canvas.</li>
-      <li>Use <strong>search</strong> or browse by <strong>category</strong> in the component picker.</li>
-      <li>Click a component to place it on the canvas.</li>
-      <li><strong>Drag</strong> to reposition; click to open the <strong>Property Dialog</strong>.</li>
-    </ol>
+    <h2>💡 LED (yorituvchi diod)</h2>
+    <p>
+      <strong>Nima?</strong> LED — elektr tokini yorug'likka aylantiradigan yarim o'tkazgichli element.
+      Robototexnikada holat ko'rsatish, yoritish va signalizatsiya uchun ishlatiladi.
+    </p>
+    <p>
+      <strong>Nega kerak?</strong> Dasturingiz ishlayotganini vizual ko'rish uchun eng oddiy usul.
+      Debugging, xabar berish va interfeys yaratishda ajralmas.
+    </p>
+    <p>
+      <strong>Qanday ulash:</strong> LED anodini (+) rezistor orqali Arduino pinga,
+      katodini (-) GND ga ulang. <strong>Muhim:</strong> 220Ω-1kΩ rezistorsiz LED kuyib ketadi!
+    </p>
+    <SimButton exampleKey="led-blink" label="🚀 LED Blink simulyatsiyasini ko'rish" />
 
-    <h2>Connecting Components</h2>
-    <ol>
-      <li>Click a <strong>pin</strong> on any component, a wire starts from that pin.</li>
-      <li>Click a <strong>destination pin</strong> to complete the connection.</li>
-      <li>Wires are <strong>color-coded</strong> by signal type:</li>
-    </ol>
+    <h2>🔘 Tugma (Pushbutton)</h2>
+    <p>
+      <strong>Nima?</strong> Mexanik tugma — bosilganda sxemani yopadi (tok o'tkazadi).
+      Robototexnikada foydalanuvchi kiritish, rejimlarni almashtirish, start/stop uchun ishlatiladi.
+    </p>
+    <p>
+      <strong>Qanday ulash:</strong> Bir oyog'ini Arduino pinga, ikkinchisini GND ga ulang.
+      <code>INPUT_PULLUP</code> rejimida tashqi rezistor kerak emas (ichki pull-up ishlatiladi).
+    </p>
+    <SimButton exampleKey="pushbutton-led" label="🚀 Tugma + LED simulyatsiyasi" />
+
+    <h2>📡 HC-SR04 — Ultrasonik masofa sensori</h2>
+    <p>
+      <strong>Nima?</strong> Ultrasonik to'lqin (40 kHz) chiqaradi, to'siqdan qaytgan vaqtni
+      o'lchab masofani hisoblaydigan datchik. 2 sm dan 400 sm gacha ishlaydi, ±3 mm aniqlik.
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> To'siqdan qochuvchi robotlar, aqlli park sensori,
+      suvning balandlik o'lchagichi, xavfsizlik tizimlari, masofa o'lchagich asboblar.
+    </p>
+    <p>
+      <strong>Ishlash prinsipi:</strong> Trig piniga 10μs impuls yuboriladi → sensor ultrasonik to'lqin chiqaradi →
+      to'siqdan qaytadi → Echo pinida yuqori signal davomiyligi masofaga proporsional.
+    </p>
     <table>
-      <thead>
-        <tr><th>Color</th><th>Signal Type</th></tr>
-      </thead>
+      <thead><tr><th>HC-SR04 pin</th><th>Arduino pin</th><th>Izoh</th></tr></thead>
       <tbody>
-        <tr><td><span className="wire-dot" style={{ background: '#ef4444' }} /> Red</td><td>VCC (power)</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#374151' }} /> Black</td><td>GND (ground)</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#3b82f6' }} /> Blue</td><td>Analog</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#22c55e' }} /> Green</td><td>Digital</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#a855f7' }} /> Purple</td><td>PWM</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#eab308' }} /> Gold</td><td>I2C (SDA/SCL)</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#f97316' }} /> Orange</td><td>SPI (MOSI/MISO/SCK)</td></tr>
-        <tr><td><span className="wire-dot" style={{ background: '#06b6d4' }} /> Cyan</td><td>USART (TX/RX)</td></tr>
+        <tr><td>VCC</td><td>5V</td><td>Quvvat</td></tr>
+        <tr><td>GND</td><td>GND</td><td>Yer</td></tr>
+        <tr><td>Trig</td><td>9</td><td>Impuls yuborish</td></tr>
+        <tr><td>Echo</td><td>10</td><td>Qaytgan signal</td></tr>
       </tbody>
     </table>
+    <SimButton exampleKey="ultrasonic-hcsr04" label="🚀 HC-SR04 simulyatsiyasini ko'rish" />
 
-    <h2>Component Categories</h2>
+    <h2>🌡️ DHT22 — Harorat va namlik sensori</h2>
+    <p>
+      <strong>Nima?</strong> Havoning harorati (-40°C dan +80°C gacha) va nisbiy namligini (0-100%)
+      o'lchaydi. Raqamli chiqish, bitta sim bilan ma'lumot uzatadi.
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> Ob-havo stansiyasi, issiqxona avtomatikasi,
+      server xonasi monitoringi, uy avtomatlashtiruvi, aqlli fermer tizimlari.
+    </p>
+    <p>
+      <strong>Farqi DHT11 dan:</strong> DHT22 aniqroq (±0.5°C vs ±2°C) va kengroq diapazon.
+      DHT11 arzonroq, lekin faqat 0-50°C va 20-80% namlik o'lchaydi.
+    </p>
+    <SimButton exampleKey="dht22-temp" label="🚀 DHT22 simulyatsiyasini ko'rish" />
 
-    <h3>Output</h3>
-    <table>
-      <thead><tr><th>Component</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>LED</td><td>Single LED with configurable color</td></tr>
-        <tr><td>RGB LED</td><td>Three-color LED (red, green, blue channels)</td></tr>
-        <tr><td>7-Segment Display</td><td>Single digit numeric display</td></tr>
-        <tr><td>LCD 16×2</td><td>2-line character LCD (I2C or parallel)</td></tr>
-        <tr><td>LCD 20×4</td><td>4-line character LCD</td></tr>
-        <tr><td>ILI9341 TFT</td><td>240×320 color TFT display (SPI)</td></tr>
-        <tr><td>Buzzer</td><td>Passive piezo buzzer</td></tr>
-        <tr><td>NeoPixel</td><td>Individually addressable RGB LED strip</td></tr>
-      </tbody>
-    </table>
+    <h2>👁️ PIR — Harakat sensori</h2>
+    <p>
+      <strong>Nima?</strong> Passive Infrared (PIR) sensori — inson va hayvonlarning tanadan
+      chiqadigan infraqizil nurlanishini aniqlaydi. Harakat bo'lganda HIGH signal chiqaradi.
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> Xavfsizlik signalizatsiyasi, avtomatik yoritish,
+      odamlarni hisoblash, energiya tejash tizimlari, smart home.
+    </p>
+    <p>
+      <strong>HC-SR501 xususiyatlari:</strong> 3-7 m masofa, 110° burchak, 5-12V quvvat,
+      vaqt va sezgirlikni sozlash imkoniyati (ikkita potensiometr).
+    </p>
+    <SimButton exampleKey="pir-motion" label="🚀 PIR + LED simulyatsiyasi" />
 
-    <h3>Input</h3>
-    <table>
-      <thead><tr><th>Component</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>Push Button</td><td>Momentary push button</td></tr>
-        <tr><td>Slide Switch</td><td>SPDT slide switch</td></tr>
-        <tr><td>Potentiometer</td><td>Analog voltage divider (ADC input)</td></tr>
-        <tr><td>Rotary Encoder</td><td>Incremental rotary encoder</td></tr>
-        <tr><td>Keypad 4×4</td><td>16-button matrix keypad</td></tr>
-        <tr><td>Joystick</td><td>Dual-axis analog joystick</td></tr>
-      </tbody>
-    </table>
+    <h2>⚙️ Servo motor</h2>
+    <p>
+      <strong>Nima?</strong> Aniq burchakka (0-180°) aylanadigan motor. Ichida
+      motor + tishli uzatma + potensiometr (feedback) bor. PWM signali bilan boshqariladi.
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> Robot qo'li, robot boshi, eshik qulfi,
+      kamera platformasi, radar aylantirgich, 3D printer, dron.
+    </p>
+    <p>
+      <strong>Turlari:</strong> SG90 (1.8 kg·cm, plastik), MG995 (11 kg·cm, metall),
+      MG996R (13 kg·cm, kuchli), 360° uzluksiz aylanuvchi servolar.
+    </p>
+    <SimButton exampleKey="servo-motor" label="🚀 Servo motor simulyatsiyasi" />
 
-    <h3>Sensors</h3>
-    <table>
-      <thead><tr><th>Component</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>HC-SR04</td><td>Ultrasonic distance sensor</td></tr>
-        <tr><td>DHT22</td><td>Temperature and humidity sensor</td></tr>
-        <tr><td>PIR Motion</td><td>Passive infrared motion sensor</td></tr>
-        <tr><td>Photoresistor</td><td>Light-dependent resistor (LDR)</td></tr>
-        <tr><td>IR Receiver</td><td>38 kHz infrared receiver</td></tr>
-      </tbody>
-    </table>
+    <h2>🎚️ Potensiometr</h2>
+    <p>
+      <strong>Nima?</strong> O'zgaruvchan rezistor — aylantirish bilan qarshilikni o'zgartiradi.
+      Arduino analog pini (A0-A5) orqali 0-1023 qiymat o'qiydi.
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> LED yorqinligini sozlash, motor tezligini boshqarish,
+      ovoz balandligini o'zgartirish, menyu navigatsiyasi, kalibrovka.
+    </p>
+    <SimButton exampleKey="potentiometer-led" label="🚀 Potensiometr + LED simulyatsiyasi" />
 
-    <h3>Passive Components</h3>
-    <table>
-      <thead><tr><th>Component</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>Resistor</td><td>Standard resistor (configurable value)</td></tr>
-        <tr><td>Capacitor</td><td>Electrolytic capacitor</td></tr>
-        <tr><td>Inductor</td><td>Coil inductor</td></tr>
-      </tbody>
-    </table>
+    <h2>🌡️ NTC Termistor — Harorat sensori</h2>
+    <p>
+      <strong>Nima?</strong> Harorat o'zgarganda qarshiligi o'zgaradigan rezistor.
+      Harorat oshsa → qarshilik kamayadi (NTC = Negative Temperature Coefficient).
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> Oddiy harorat o'lchash, ortiqcha qizib ketishdan himoya,
+      termostat, 3D printer stol harorati, batareya monitoringi.
+    </p>
+    <SimButton exampleKey="ntc-temperature" label="🚀 NTC sensori simulyatsiyasi" />
 
-    <h2>Component Properties</h2>
-    <p>Each component has a <strong>Property Dialog</strong> accessible by clicking it on the canvas:</p>
-    <table>
-      <thead><tr><th>Property</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>Arduino Pin</td><td>The digital or analog pin this component is connected to</td></tr>
-        <tr><td>Color</td><td>Visual color (LEDs, wires)</td></tr>
-        <tr><td>Value</td><td>Component value (e.g., resistance in Ω)</td></tr>
-        <tr><td>Rotation</td><td>Rotate in 90° increments</td></tr>
-        <tr><td>Delete</td><td>Remove the component from the canvas</td></tr>
-      </tbody>
-    </table>
+    <h2>🔊 Buzzer</h2>
+    <p>
+      <strong>Nima?</strong> Elektr signalini ovozga aylantiradigan qurilma.
+      <strong>Aktiv buzzer</strong> — o'zi signal chiqaradi (faqat tok bering).
+      <strong>Passiv buzzer</strong> — chastotani siz berasiz (tone() funksiyasi bilan).
+    </p>
+    <p>
+      <strong>Qayerda ishlatiladi?</strong> Ogohlantirish signali, melodiya chalish,
+      Morse kodi, o'yin ovozlari, budilnik, xavfsizlik tizimlari.
+    </p>
+    <SimButton exampleKey="buzzer-melody" label="🚀 Buzzer melodiya simulyatsiyasi" />
+
+    <h2>🔧 Rezistor</h2>
+    <p>
+      <strong>Nima?</strong> Elektr tokini cheklovchi element. Ohm qonuniga ko'ra ishlaydi: V = I × R.
+      Har bir sxemaning asosi — komponentlarni ortiqcha tokdan himoya qiladi.
+    </p>
+    <p>
+      <strong>Qanday tanlash?</strong> LED uchun 220Ω-1kΩ, pull-up/pull-down uchun 10kΩ,
+      tok bo'lgich uchun hisoblash kerak. Rangli chiziqlar qiymatini ko'rsatadi.
+    </p>
+
+    <h2>📺 7-segment displey</h2>
+    <p>
+      <strong>Nima?</strong> 7 ta LED segmentdan tashkil topgan raqamli displey.
+      0-9 raqamlar va ba'zi harflarni ko'rsatadi. Soat, hisoblagich, harorat ko'rsatish uchun.
+    </p>
+
+    <h2>📟 LCD 16×2 displey</h2>
+    <p>
+      <strong>Nima?</strong> 16 ta belgi × 2 qator matnli displey.
+      I2C yoki parallel rejimda ishlaydi. Harorat, masofa, holat xabarlarini ko'rsatish uchun.
+    </p>
+
+    <h2>🌈 NeoPixel (WS2812B)</h2>
+    <p>
+      <strong>Nima?</strong> Har biri 16 million rang ko'rsata oladigan aqlli RGB LED.
+      Bir ma'lumot pini bilan yuzlab LED ni ketma-ket boshqarish mumkin. Yoritish, animatsiya, indikator.
+    </p>
+
+    <div className="docs-callout">
+      <strong>Maslahat:</strong> Har bir datchik yonidagi "Simulyatorda ko'rish" tugmasini bosing —
+      tayyor ulangan loyihani ko'rasiz va darhol sinab ko'rishingiz mumkin!
+    </div>
   </div>
 );
 
@@ -483,7 +642,7 @@ const RoadmapSection: React.FC = () => (
   <div className="docs-section">
     <span className="docs-label">// future</span>
     <h1>Roadmap</h1>
-    <p>Features that are implemented, in progress, and planned for future releases of Velxio.</p>
+    <p>Features that are implemented, in progress, and planned for future releases of RoboMentor.</p>
 
     <h2>✅ Implemented</h2>
     <ul>
@@ -537,7 +696,7 @@ const RoadmapSection: React.FC = () => (
     <div className="docs-callout">
       <strong>Want to contribute?</strong>{' '}
       Feature requests, bug reports, and pull requests are welcome at{' '}
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">github.com/davidmonterocrespo24/velxio</a>.
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">github.com/davidmonterocrespo24/RoboMentor</a>.
     </div>
   </div>
 );
@@ -548,7 +707,7 @@ const ArchitectureSection: React.FC = () => (
     <span className="docs-label">// system design</span>
     <h1>Project Architecture</h1>
     <p>
-      Velxio is a fully local Arduino emulator using official Wokwi repositories for maximum
+      RoboMentor is a fully local Arduino emulator using official Wokwi repositories for maximum
       compatibility. It features real AVR8 CPU emulation, 48+ interactive electronic components,
       a comprehensive wire system, and a build-time component discovery pipeline.
     </p>
@@ -641,14 +800,7 @@ const ArchitectureSection: React.FC = () => (
       <li>Grid snapping, 20 px grid for all wire endpoints</li>
     </ul>
 
-    <div className="docs-callout">
-      <strong>Full details:</strong>{' '}
-      See{' '}
-      <a href={`${GITHUB_URL}/blob/master/docs/ARCHITECTURE.md`} target="_blank" rel="noopener noreferrer">
-        docs/ARCHITECTURE.md
-      </a>{' '}
-      in the repository.
-    </div>
+  
   </div>
 );
 
@@ -658,7 +810,7 @@ const WokwiLibsSection: React.FC = () => (
     <span className="docs-label">// open-source libs</span>
     <h1>Wokwi Libraries</h1>
     <p>
-      Velxio uses official Wokwi open-source repositories cloned locally in <code>wokwi-libs/</code>.
+      RoboMentor uses official Wokwi open-source repositories cloned locally in <code>wokwi-libs/</code>.
       This gives you up-to-date, compatible emulation engines and visual components without npm registry
       dependencies.
     </p>
@@ -770,7 +922,7 @@ const McpSection: React.FC = () => (
     <span className="docs-label">// AI integration</span>
     <h1>MCP Server</h1>
     <p>
-      Velxio exposes a{' '}
+      RoboMentor exposes a{' '}
       <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">
         Model Context Protocol
       </a>{' '}
@@ -786,8 +938,8 @@ const McpSection: React.FC = () => (
       <tbody>
         <tr><td><code>compile_project</code></td><td>Compile Arduino sketch files → Intel HEX / binary</td></tr>
         <tr><td><code>run_project</code></td><td>Compile and mark artifact as simulation-ready</td></tr>
-        <tr><td><code>import_wokwi_json</code></td><td>Parse a Wokwi <code>diagram.json</code> → Velxio circuit</td></tr>
-        <tr><td><code>export_wokwi_json</code></td><td>Serialise a Velxio circuit → Wokwi <code>diagram.json</code></td></tr>
+        <tr><td><code>import_wokwi_json</code></td><td>Parse a Wokwi <code>diagram.json</code> → RoboMentor circuit</td></tr>
+        <tr><td><code>export_wokwi_json</code></td><td>Serialise a RoboMentor circuit → Wokwi <code>diagram.json</code></td></tr>
         <tr><td><code>create_circuit</code></td><td>Create a new circuit definition</td></tr>
         <tr><td><code>update_circuit</code></td><td>Merge changes into an existing circuit</td></tr>
         <tr><td><code>generate_code_files</code></td><td>Generate starter <code>.ino</code> code from a circuit</td></tr>
@@ -802,9 +954,9 @@ python mcp_server.py`}</CodeBlock>
     <p>Claude Desktop config (<code>~/.claude/claude_desktop_config.json</code>):</p>
     <CodeBlock language="json">{`{
   "mcpServers": {
-    "velxio": {
+    "RoboMentor": {
       "command": "python",
-      "args": ["/absolute/path/to/velxio/backend/mcp_server.py"]
+      "args": ["/absolute/path/to/RoboMentor/backend/mcp_server.py"]
     }
   }
 }`}</CodeBlock>
@@ -815,12 +967,12 @@ python mcp_sse_server.py --port 8002`}</CodeBlock>
     <p>MCP client config:</p>
     <CodeBlock language="json">{`{
   "mcpServers": {
-    "velxio": { "url": "http://localhost:8002/sse" }
+    "RoboMentor": { "url": "http://localhost:8002/sse" }
   }
 }`}</CodeBlock>
 
     <h2>Circuit Data Format</h2>
-    <p>Velxio circuits are plain JSON objects:</p>
+    <p>RoboMentor circuits are plain JSON objects:</p>
     <CodeBlock language="json">{`{
   "board_fqbn": "arduino:avr:uno",
   "version": 1,
@@ -922,7 +1074,7 @@ const SetupSection: React.FC = () => (
   <div className="docs-section">
     <span className="docs-label">// project status</span>
     <h1>Project Status</h1>
-    <p>A comprehensive overview of all features currently implemented in Velxio.</p>
+    <p>A comprehensive overview of all features currently implemented in RoboMentor.</p>
 
     <h2>AVR Emulation (avr8js)</h2>
     <table>
@@ -1048,7 +1200,7 @@ const RiscVEmulationSection: React.FC = () => (
     <h1>RISC-V Emulation (ESP32-C3)</h1>
     <p>
       ESP32-C3, XIAO ESP32-C3, and C3 SuperMini boards use a <strong>RISC-V RV32IMC</strong> core running at
-      160 MHz. Velxio emulates them entirely in the browser, no backend, no QEMU, no WebAssembly pipeline.
+      160 MHz. RoboMentor emulates them entirely in the browser, no backend, no QEMU, no WebAssembly pipeline.
       The emulator is written in pure TypeScript and runs at real-time speeds.
     </p>
 
@@ -1164,7 +1316,7 @@ const Esp32EmulationSection: React.FC = () => (
     <h1>ESP32 Emulation (Xtensa)</h1>
     <p>
       ESP32 and ESP32-S3 boards use an <strong>Xtensa LX6 / LX7</strong> architecture. Because no
-      production-quality Xtensa emulator is available as pure JavaScript, Velxio uses a
+      production-quality Xtensa emulator is available as pure JavaScript, RoboMentor uses a
       <strong> QEMU-based backend</strong> for these boards, the lcgamboa fork with
       libqemu-xtensa, compiled to a native binary and served by the FastAPI backend.
     </p>
@@ -1229,9 +1381,9 @@ const Esp32EmulationSection: React.FC = () => (
 
     <h2>Requirements</h2>
     <p>
-      QEMU-based emulation requires the Velxio backend to be running. This means it works with
+      QEMU-based emulation requires the RoboMentor backend to be running. This means it works with
       the <strong>hosted version</strong> at{' '}
-      <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer">velxio.dev</a>{' '}
+      <a href="https://RoboMentor.dev" target="_blank" rel="noopener noreferrer">RoboMentor.dev</a>{' '}
       and with <strong>Docker self-hosting</strong>, but not in a pure static frontend deployment.
     </p>
 
@@ -1326,7 +1478,7 @@ const Rp2040EmulationSection: React.FC = () => (
     <h2>Full Documentation</h2>
     <p>
       See the complete technical reference:{' '}
-      <a href="https://github.com/davidmonterocrespo24/velxio/blob/master/docs/RP2040_EMULATION.md" target="_blank" rel="noopener noreferrer">
+      <a href="https://github.com/davidmonterocrespo24/RoboMentor/blob/master/docs/RP2040_EMULATION.md" target="_blank" rel="noopener noreferrer">
         RP2040_EMULATION.md
       </a>
     </p>
@@ -1340,7 +1492,7 @@ const RaspberryPi3EmulationSection: React.FC = () => (
     <h1>Raspberry Pi 3 Emulation (QEMU)</h1>
     <p>
       The Raspberry Pi 3B is emulated using <strong>QEMU 8.1.3</strong> with <code>-M raspi3b</code>.
-      This is the only board in Velxio that runs a full operating system, a real{' '}
+      This is the only board in RoboMentor that runs a full operating system, a real{' '}
       <strong>Raspberry Pi OS (Trixie)</strong> image booted inside the emulator.
       Users write Python scripts (not C++), which are executed by the real Python 3 interpreter inside the VM.
     </p>
@@ -1369,7 +1521,7 @@ const RaspberryPi3EmulationSection: React.FC = () => (
     </ul>
 
     <h2>RPi.GPIO Shim</h2>
-    <p>
+    <p>ss
       A custom <code>RPi.GPIO</code> shim is injected at <code>/usr/local/lib/python3.11/dist-packages/RPi/GPIO.py</code>
       inside the VM. When user code calls <code>GPIO.output(pin, value)</code>, the shim writes
       a line like <code>GPIO 17 1</code> to <strong>ttyAMA1</strong>.
@@ -1410,7 +1562,7 @@ const RaspberryPi3EmulationSection: React.FC = () => (
     <h2>Full Documentation</h2>
     <p>
       See the complete technical reference:{' '}
-      <a href="https://github.com/davidmonterocrespo24/velxio/blob/master/docs/RASPBERRYPI3_EMULATION.md" target="_blank" rel="noopener noreferrer">
+      <a href="https://github.com/davidmonterocrespo24/RoboMentor/blob/master/docs/RASPBERRYPI3_EMULATION.md" target="_blank" rel="noopener noreferrer">
         RASPBERRYPI3_EMULATION.md
       </a>
     </p>
@@ -1426,6 +1578,12 @@ const SECTION_MAP: Record<SectionId, React.FC> = {
   'rp2040-emulation': Rp2040EmulationSection,
   'raspberry-pi3-emulation': RaspberryPi3EmulationSection,
   components: ComponentsSection,
+  'comp-led': LedSection,
+  'comp-ultrasonic': UltrasonicSection,
+  'comp-servo': ServoSection,
+  'comp-dht22': Dht22Section,
+  'comp-pir': PirSection,
+  'comp-buzzer': BuzzerSection,
   roadmap: RoadmapSection,
   architecture: ArchitectureSection,
   'wokwi-libs': WokwiLibsSection,
@@ -1526,7 +1684,7 @@ export const DocsPage: React.FC = () => {
           headline: meta.title,
           description: meta.description,
           url: pageUrl,
-          isPartOf: { '@type': 'WebSite', url: `${BASE_URL}/`, name: 'Velxio' },
+          isPartOf: { '@type': 'WebSite', url: `${BASE_URL}/`, name: 'RoboMentor' },
           inLanguage: 'en-US',
           author: AUTHOR,
         },

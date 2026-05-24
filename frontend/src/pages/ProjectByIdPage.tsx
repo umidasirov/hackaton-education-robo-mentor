@@ -7,7 +7,7 @@ import { useProjectStore } from '../store/useProjectStore';
 import { useSEO } from '../utils/useSEO';
 import { EditorPage } from './EditorPage';
 
-const DOMAIN = 'https://velxio.dev';
+const DOMAIN = 'https://vexio.dev';
 
 interface ProjectMeta {
   name: string;
@@ -32,15 +32,15 @@ export const ProjectByIdPage: React.FC = () => {
   useSEO(
     projectMeta && projectMeta.isPublic
       ? {
-          title: `${projectMeta.name} by ${projectMeta.ownerUsername} | Velxio`,
+          title: `${projectMeta.name} by ${projectMeta.ownerUsername} | vexio`,
           description: projectMeta.description
-            ? `${projectMeta.description} — Simulate and remix this Arduino project on Velxio.`
-            : `Arduino project by ${projectMeta.ownerUsername}. View and simulate it free on Velxio.`,
+            ? `${projectMeta.description} — Simulate and remix this Arduino project on vexio.`
+            : `Arduino project by ${projectMeta.ownerUsername}. View and simulate it free on vexio.`,
           url: `${DOMAIN}/project/${id}`,
         }
       : {
-          title: 'Project — Velxio Arduino Emulator',
-          description: 'View and simulate this Arduino project on Velxio — free, open-source multi-board emulator.',
+          title: 'Project — vexio Arduino Emulator',
+          description: 'View and simulate this Arduino project on vexio — free, open-source multi-board emulator.',
           url: `${DOMAIN}/editor`,
           noindex: true,
         }

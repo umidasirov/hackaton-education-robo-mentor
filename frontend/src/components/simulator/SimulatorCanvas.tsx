@@ -1,6 +1,7 @@
 import { useSimulatorStore, getEsp32Bridge } from '../../store/useSimulatorStore';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ESP32_ADC_PIN_MAP } from '../components-wokwi/Esp32Element';
+import '../components-wokwi/BreadboardElement'; // registers wokwi-breadboard
 import { ComponentPickerModal } from '../ComponentPickerModal';
 import { ComponentPropertyDialog } from './ComponentPropertyDialog';
 import { SensorControlPanel } from './SensorControlPanel';
@@ -14,8 +15,11 @@ import type { SegmentHandle } from './WireLayer';
 import { BoardOnCanvas } from './BoardOnCanvas';
 import { PartSimulationRegistry } from '../../simulation/parts';
 import { PinOverlay } from './PinOverlay';
+import { IssueBadge } from './IssueBadge';
+import { IssueModal } from './IssueModal';
 import { isBoardComponent, boardPinToNumber } from '../../utils/boardPinMapping';
 import { autoWireColor, WIRE_KEY_COLORS } from '../../utils/wireUtils';
+import { battery9vBothTerminalsWired } from '../../simulation/batteryModel';
 import {
   findWireNearPoint,
   getRenderedPoints,
@@ -629,24 +633,86 @@ export const SimulatorCanvas = () => {
     return () => clearTimeout(timer);
   }, [recalculateAllWirePositions]);
 
-  // Connect components to pin manager
+  // Connect components to pin manager — only while simulation is running (Run).
   useEffect(() => {
+    if (!running || !pinManager) return;
+
     const unsubscribers: (() => void)[] = [];
 
     // Returns true if the component has at least one wire connected to a board
     // GND or power-rail pin (boardPinToNumber returns -1 for these).
     // Used to block output components from activating without a ground connection.
-    const componentHasGndWire = (component: any): boolean =>
-      wires.some(w => {
+    // Also traces through breadboard so a GND wired via breadboard is detected.
+    const componentHasGndWire = (component: any): boolean => {
+      // Breadboard internal pin connections (same as DynamicComponent logic)
+      const breadboardConnectedPins = (enterPin: string): string[] => {
+        const COLS = 30;
+        if (/^tp\d+\+$/.test(enterPin)) return Array.from({length:COLS},(_,i)=>`tp${i+1}+`).filter(p=>p!==enterPin);
+        if (/^tp\d+-$/.test(enterPin))  return Array.from({length:COLS},(_,i)=>`tp${i+1}-`).filter(p=>p!==enterPin);
+        if (/^bp\d+\+$/.test(enterPin)) return Array.from({length:COLS},(_,i)=>`bp${i+1}+`).filter(p=>p!==enterPin);
+        if (/^bp\d+-$/.test(enterPin))  return Array.from({length:COLS},(_,i)=>`bp${i+1}-`).filter(p=>p!==enterPin);
+        const m = /^(\d+)([a-j])$/.exec(enterPin);
+        if (m) {
+          const col = m[1]; const row = m[2];
+          const block = ['a','b','c','d','e'].includes(row) ? ['a','b','c','d','e'] : ['f','g','h','i','j'];
+          return block.filter(r=>r!==row).map(r=>`${col}${r}`);
+        }
+        return [];
+      };
+
+      // BFS: trace from component through wires (and breadboards) to find a GND board pin
+      const traceGnd = (fromId: string, fromPin: string, depth: number): boolean => {
+        if (depth > 8) return false;
+        return wires.some(w => {
+          const isStart = w.start.componentId === fromId && w.start.pinName === fromPin;
+          const isEnd   = w.end.componentId   === fromId && w.end.pinName   === fromPin;
+          if (!isStart && !isEnd) return false;
+          const other = isStart ? w.end : w.start;
+          if (isBoardComponent(other.componentId)) {
+            const board = boards.find(b => b.id === other.componentId);
+            const key = board ? board.boardKind : other.componentId;
+            return boardPinToNumber(key, other.pinName) === -1;
+          }
+          // Traverse through breadboard
+          const comp = components.find(c => c.id === other.componentId);
+          if (comp && comp.metadataId === 'breadboard') {
+            return breadboardConnectedPins(other.pinName).some(exit =>
+              traceGnd(other.componentId, exit, depth + 1)
+            );
+          }
+          if (comp && comp.metadataId === 'battery-9v' && other.pinName === 'GND') {
+            return battery9vBothTerminalsWired(wires, other.componentId);
+          }
+          return false;
+        });
+      };
+
+      return wires.some(w => {
         const isSelfStart = w.start.componentId === component.id;
         const isSelfEnd   = w.end.componentId   === component.id;
         if (!isSelfStart && !isSelfEnd) return false;
-        const otherEndpoint = isSelfStart ? w.end : w.start;
-        if (!isBoardComponent(otherEndpoint.componentId)) return false;
-        const boardInstance = boards.find(b => b.id === otherEndpoint.componentId);
-        const lookupKey = boardInstance ? boardInstance.boardKind : otherEndpoint.componentId;
-        return boardPinToNumber(lookupKey, otherEndpoint.pinName) === -1;
+        const selfPin   = isSelfStart ? w.start.pinName : w.end.pinName;
+        const otherEp   = isSelfStart ? w.end : w.start;
+        if (isBoardComponent(otherEp.componentId)) {
+          const board = boards.find(b => b.id === otherEp.componentId);
+          const key = board ? board.boardKind : otherEp.componentId;
+          return boardPinToNumber(key, otherEp.pinName) === -1;
+        }
+        // Check if GND is reachable through a breadboard
+        const comp = components.find(c => c.id === otherEp.componentId);
+        if (comp && comp.metadataId === 'breadboard') {
+          return breadboardConnectedPins(otherEp.pinName).some(exit =>
+            traceGnd(otherEp.componentId, exit, 0)
+          );
+        }
+        if (comp && comp.metadataId === 'battery-9v' && otherEp.pinName === 'GND') {
+          return battery9vBothTerminalsWired(wires, otherEp.componentId);
+        }
+        // Also support direct resistor→GND path (existing logic)
+        void selfPin;
+        return false;
       });
+    };
 
     // Helper to add subscription
     // wireConnected: true when this call came from the wire-scanning path (not properties.pin).
@@ -712,6 +778,48 @@ export const SimulatorCanvas = () => {
           w => w.start.componentId === component.id || w.end.componentId === component.id
         );
 
+        // BFS through breadboard to find board pin for wire-subscription
+        const findBoardPinViaWires = (
+          fromId: string, fromPin: string, depth: number
+        ): { boardId: string; boardPin: number; compPin: string } | null => {
+          if (depth > 8) return null;
+          const breadboardConnectedPins2 = (ep: string): string[] => {
+            const COLS = 30;
+            if (/^tp\d+\+$/.test(ep)) return Array.from({length:COLS},(_,i)=>`tp${i+1}+`).filter(p=>p!==ep);
+            if (/^tp\d+-$/.test(ep))  return Array.from({length:COLS},(_,i)=>`tp${i+1}-`).filter(p=>p!==ep);
+            if (/^bp\d+\+$/.test(ep)) return Array.from({length:COLS},(_,i)=>`bp${i+1}+`).filter(p=>p!==ep);
+            if (/^bp\d+-$/.test(ep))  return Array.from({length:COLS},(_,i)=>`bp${i+1}-`).filter(p=>p!==ep);
+            const m = /^(\d+)([a-j])$/.exec(ep);
+            if (m) {
+              const col=m[1],row=m[2];
+              const blk=['a','b','c','d','e'].includes(row)?['a','b','c','d','e']:['f','g','h','i','j'];
+              return blk.filter(r=>r!==row).map(r=>`${col}${r}`);
+            }
+            return [];
+          };
+          for (const w of wires) {
+            const isS = w.start.componentId===fromId && w.start.pinName===fromPin;
+            const isE = w.end.componentId===fromId   && w.end.pinName===fromPin;
+            if (!isS && !isE) continue;
+            const other = isS ? w.end : w.start;
+            const selfPn = isS ? w.start.pinName : w.end.pinName;
+            if (isBoardComponent(other.componentId)) {
+              const bi = boards.find(b=>b.id===other.componentId);
+              const key = bi ? bi.boardKind : other.componentId;
+              const pin = boardPinToNumber(key, other.pinName);
+              if (pin !== null && pin >= 0) return { boardId: other.componentId, boardPin: pin, compPin: selfPn };
+            }
+            const comp2 = components.find(c=>c.id===other.componentId);
+            if (comp2 && comp2.metadataId==='breadboard') {
+              for (const exit of breadboardConnectedPins2(other.pinName)) {
+                const res = findBoardPinViaWires(other.componentId, exit, depth+1);
+                if (res) return res;
+              }
+            }
+          }
+          return null;
+        };
+
         connectedWires.forEach(wire => {
           const isStartSelf = wire.start.componentId === component.id;
           const selfEndpoint = isStartSelf ? wire.start : wire.end;
@@ -734,6 +842,12 @@ export const SimulatorCanvas = () => {
               console.warn(`[WirePin] Could not resolve pin "${otherEndpoint.pinName}" on ${lookupKey}`);
             }
             // pin === -1 → power/GND pin, skip silently
+          } else {
+            // Not directly on board — try traversing through breadboard
+            const via = findBoardPinViaWires(otherEndpoint.componentId, otherEndpoint.pinName, 0);
+            if (via) {
+              subscribeComponentToPin(component, via.boardPin, selfEndpoint.pinName, true);
+            }
           }
         });
       }
@@ -742,12 +856,15 @@ export const SimulatorCanvas = () => {
     return () => {
       unsubscribers.forEach(unsub => unsub());
     };
-  }, [components, wires, boards, pinManager, updateComponentState]);
+  }, [running, components, wires, boards, pinManager, updateComponentState]);
 
   // Board built-in LED: subscribe directly to pinManager for the LED pin of each board.
   // This works even when no external led-builtin component exists (e.g. basic Blink example).
   useEffect(() => {
-    if (!pinManager) return;
+    if (!pinManager || !running) {
+      setBoardLedStates({});
+      return;
+    }
     const unsubs: (() => void)[] = [];
 
     boards.forEach((board) => {
@@ -774,7 +891,7 @@ export const SimulatorCanvas = () => {
     });
 
     return () => unsubs.forEach((u) => u());
-  }, [boards, pinManager]);
+  }, [boards, pinManager, running]);
 
   // ESP32 input components: forward button presses and potentiometer values to QEMU
   useEffect(() => {
@@ -1053,8 +1170,33 @@ export const SimulatorCanvas = () => {
   };
 
   // Start panning on middle-click or right-click
-  const handleCanvasMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 1 || e.button === 2) {
+const handleCanvasMouseDown = (e: React.MouseEvent) => {
+  // O'ng va o'rta tugma uchun eski logika
+  if (e.button === 1 || e.button === 2) {
+    e.preventDefault();
+    isPanningRef.current = true;
+    panStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      panX: panRef.current.x,
+      panY: panRef.current.y,
+    };
+    return;
+  }
+  
+  // Chap tugma (button === 0) uchun - Tinkercad uslubi
+  if (e.button === 0) {
+    // Click yoki drag boshlanish vaqtini saqlash
+    setClickStartTime(Date.now());
+    setClickStartPos({ x: e.clientX, y: e.clientY });
+    
+    // Komponent yoki board ga bosilganmi tekshirish
+    const target = e.target as HTMLElement;
+    const componentWrapper = target.closest('[data-component-id]');
+    const boardOverlay = target.closest('[data-board-overlay]');
+    
+    // Agar komponent yoki board ga bosilmagan bo'lsa -> pan mod
+    if (!componentWrapper && !boardOverlay && !wireInProgress) {
       e.preventDefault();
       isPanningRef.current = true;
       panStartRef.current = {
@@ -1064,7 +1206,8 @@ export const SimulatorCanvas = () => {
         panY: panRef.current.y,
       };
     }
-  };
+  }
+};
 
   // Handle mousedown on a segment handle circle (called from WireLayer)
   const handleHandleMouseDown = useCallback(
@@ -1288,6 +1431,13 @@ export const SimulatorCanvas = () => {
             zoom={zoom}
           />
         )}
+
+        {/* Tinkercad uslubidagi chaqmoq belgisi - AI xato topsa chiqadi */}
+        <IssueBadge
+          componentId={component.id}
+          x={component.x}
+          y={component.y}
+        />
       </React.Fragment>
     );
   };
@@ -1320,10 +1470,10 @@ export const SimulatorCanvas = () => {
         <div className="canvas-header">
           <div className="canvas-header-left">
             {/* Status LED */}
-            <span className={`status-dot ${running ? 'running' : 'stopped'}`} title={running ? 'Running' : 'Stopped'} />
+            {/* <span className={`status-dot ${running ? 'running' : 'stopped'}`} title={running ? 'Running' : 'Stopped'} /> */}
 
             {/* Active board selector (multi-board) */}
-            <select
+            {/* <select
               className="board-selector"
               value={activeBoardId ?? ''}
               onChange={(e) => useSimulatorStore.getState().setActiveBoardId(e.target.value)}
@@ -1333,7 +1483,7 @@ export const SimulatorCanvas = () => {
               {boards.map((b) => (
                 <option key={b.id} value={b.id}>{BOARD_KIND_LABELS[b.boardKind] ?? b.id}</option>
               ))}
-            </select>
+            </select> */}
 
             {/* Serial Monitor toggle */}
             <button
@@ -1406,33 +1556,12 @@ export const SimulatorCanvas = () => {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="2 14 6 8 10 14 14 6 18 14 22 10" />
               </svg>
-              Scope
+              Oscilloscope
             </button>
           </div>
 
           <div className="canvas-header-right">
-            {/* Zoom controls */}
-            <div className="zoom-controls">
-              <button className="zoom-btn" onClick={() => handleWheel({ deltaY: 100, clientX: 0, clientY: 0, preventDefault: () => {} } as any)} title="Zoom out">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-              </button>
-              <button className="zoom-level" onClick={handleResetView} title="Reset view (click to reset)">
-                {Math.round(zoom * 100)}%
-              </button>
-              <button className="zoom-btn" onClick={() => handleWheel({ deltaY: -100, clientX: 0, clientY: 0, preventDefault: () => {} } as any)} title="Zoom in">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-              </button>
-            </div>
-
-            {/* Component count */}
-            <span className="component-count" title={`${components.length} component${components.length !== 1 ? 's' : ''}`}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" />
-                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-              </svg>
-              {components.length}
-            </span>
-
+   
             {/* Add Component */}
             <button
               className="add-component-btn"
@@ -1444,7 +1573,6 @@ export const SimulatorCanvas = () => {
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add
             </button>
 
           </div>
@@ -1567,6 +1695,9 @@ export const SimulatorCanvas = () => {
         </div>
       </div>
 
+      {/* Sxema xatosi modali (Tinkercad uslubida) - chaqmoq bosilganda */}
+      <IssueModal />
+
       {/* Pin Selector Modal */}
       {showPinSelector && selectedComponentId && (
         <PinSelector
@@ -1591,7 +1722,8 @@ export const SimulatorCanvas = () => {
 
         const element = document.getElementById(propertyDialogComponentId);
         const pinInfo = element ? (element as any).pinInfo : [];
-
+        console.log(element,pinInfo);
+        
         return (
           <ComponentPropertyDialog
             componentId={propertyDialogComponentId}
@@ -1601,7 +1733,7 @@ export const SimulatorCanvas = () => {
             pinInfo={pinInfo || []}
             onClose={() => setShowPropertyDialog(false)}
             onRotate={handleRotateComponent}
-            onDelete={(id) => {
+            onDelete={(id) => {ComponentPropertyDialog
               removeComponent(id);
               setShowPropertyDialog(false);
             }}

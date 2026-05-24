@@ -1,0 +1,247 @@
+/* WokWI style - clean, minimal, professional */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.projects-page {
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+/* Header */
+.projects-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.projects-header h1 {
+  font-size: 36px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.projects-header p {
+  font-size: 16px;
+  color: #888;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.filter-btn {
+  background: #252525;
+  border: 1px solid #333;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #fff;
+}
+
+.filter-btn.active {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 48px;
+  padding: 16px 0;
+  border-top: 1px solid #2a2a2a;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Card */
+.project-card {
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+}
+
+.card-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-color: #2a2a2a;
+}
+
+.card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.difficulty {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.difficulty.beginner {
+  background: #1a3a2a;
+  color: #4ade80;
+}
+
+.difficulty.intermediate {
+  background: #3a3a1a;
+  color: #fbbf24;
+}
+
+.difficulty.advanced {
+  background: #3a1a1a;
+  color: #f87171;
+}
+
+.duration {
+  font-size: 11px;
+  color: #666;
+}
+
+.card-body h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.card-body p {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.parts {
+  font-size: 12px;
+  color: #666;
+}
+
+.start {
+  font-size: 12px;
+  font-weight: 500;
+  color: #60a5fa;
+  transition: transform 0.2s;
+}
+
+.project-card:hover .start {
+  transform: translateX(4px);
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .projects-page {
+    padding: 24px 16px 48px;
+  }
+
+  .projects-header h1 {
+    font-size: 28px;
+  }
+
+  .stats {
+    gap: 24px;
+  }
+
+  .stat-num {
+    font-size: 22px;
+  }
+
+  .projects-grid {
+    gap: 16px;
+  }
+
+  .card-body h3 {
+    font-size: 16px;
+  }
+}

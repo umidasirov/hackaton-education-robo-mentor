@@ -4,6 +4,8 @@ import { LandingPage } from './pages/LandingPage';
 import { EditorPage } from './pages/EditorPage';
 import { ExamplesPage } from './pages/ExamplesPage';
 import { DocsPage } from './pages/DocsPage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { ProjectDetailPage } from './pages/ProjectDetailPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { UserProfilePage } from './pages/UserProfilePage';
@@ -34,12 +36,16 @@ function App() {
 
   return (
     <Router>
+      <div className="app">
+      <main style={{ flex: 1, flexDirection: 'column' }}>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<EditorPage />} />
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/examples" element={<ExamplesPage />} />
         <Route path="/examples/:exampleId" element={<ExampleDetailPage />} />
         <Route path="/docs" element={<DocsPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin" element={<AdminPage />} />
@@ -62,6 +68,8 @@ function App() {
         <Route path="/:username/:projectName" element={<ProjectPage />} />
         <Route path="/:username" element={<UserProfilePage />} />
       </Routes>
+      </main>
+      </div>
     </Router>
   );
 }

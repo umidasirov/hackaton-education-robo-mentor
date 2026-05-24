@@ -1,5 +1,6 @@
 import { PartSimulationRegistry } from './PartSimulationRegistry';
 import type { AnySimulator } from './PartSimulationRegistry';
+import { SIM_PIN_VCC } from '../simPowerConstants';
 import { RP2040Simulator } from '../RP2040Simulator';
 import { getADC, setAdcVoltage } from './partUtils';
 import { registerSensorUpdate, unregisterSensorUpdate } from '../SensorUpdateRegistry';
@@ -24,18 +25,22 @@ PartSimulationRegistry.register('rgb-led', {
         const pinG = getArduinoPinHelper('G');
         const pinB = getArduinoPinHelper('B');
 
-        // Digital fallback
-        if (pinR !== null) {
+        if (pinR === SIM_PIN_VCC) el.ledRed = 255;
+        if (pinG === SIM_PIN_VCC) el.ledGreen = 255;
+        if (pinB === SIM_PIN_VCC) el.ledBlue = 255;
+
+        // Digital fallback (GPIO only — not power-rail sentinels)
+        if (pinR !== null && pinR >= 0) {
             unsubscribers.push(pinManager.onPinChange(pinR, (_: number, state: boolean) => {
                 el.ledRed = state ? 255 : 0;
             }));
         }
-        if (pinG !== null) {
+        if (pinG !== null && pinG >= 0) {
             unsubscribers.push(pinManager.onPinChange(pinG, (_: number, state: boolean) => {
                 el.ledGreen = state ? 255 : 0;
             }));
         }
-        if (pinB !== null) {
+        if (pinB !== null && pinB >= 0) {
             unsubscribers.push(pinManager.onPinChange(pinB, (_: number, state: boolean) => {
                 el.ledBlue = state ? 255 : 0;
             }));
@@ -48,14 +53,19 @@ PartSimulationRegistry.register('rgb-led', {
             { pin: pinB, prop: 'ledBlue' },
         ];
         for (const { pin, prop } of pwmPins) {
-            if (pin !== null) {
+            if (pin !== null && pin >= 0) {
                 unsubscribers.push(pinManager.onPwmChange(pin, (_: number, dc: number) => {
                     el[prop] = Math.round(dc * 255);
                 }));
             }
         }
 
-        return () => unsubscribers.forEach(u => u());
+        return () => {
+            unsubscribers.forEach(u => u());
+            el.ledRed = 0;
+            el.ledGreen = 0;
+            el.ledBlue = 0;
+        };
     },
 });
 

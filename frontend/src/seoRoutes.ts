@@ -1,15 +1,15 @@
 /**
- * Single source of truth for all public, indexable routes and their SEO metadata.
- * Used by:
- *  1. scripts/generate-sitemap.mjs  → builds sitemap.xml at build time
- *  2. scripts/prerender-seo.mjs     → generates prerendered HTML per route
- *  3. Page components (via getSeoMeta) → useSEO() hook
+ * Barcha umumiy, indekslanadigan marshrutlar va ularning SEO metamaʼlumotlari uchun yagona manba.
+ * Quyidagilar uchun ishlatiladi:
+ *  1. scripts/generate-sitemap.mjs  → sitemap.xml ni yaratadi
+ *  2. scripts/prerender-seo.mjs     → har bir marshrut uchun oldindan tayyorlangan HTML yaratadi
+ *  3. Page komponentlari (getSeoMeta orqali) → useSEO() hooki
  *
- * Routes with `noindex: true` are excluded from the sitemap.
- * Routes with `seoMeta` get prerendered HTML at build time.
+ * `noindex: true` boʻlgan marshrutlar sitemapdan chiqarib tashlanadi.
+ * `seoMeta` ga ega boʻlgan marshrutlar qurilish vaqtida oldindan tayyorlangan HTML oladi.
  */
 
-const DOMAIN = 'https://velxio.dev';
+const DOMAIN = 'https://robomentor.uz';
 
 export interface SeoMeta {
   title: string;
@@ -19,29 +19,29 @@ export interface SeoMeta {
 
 export interface SeoRoute {
   path: string;
-  /** 0.0 – 1.0 (default 0.5) */
+  /** 0.0 – 1.0 (standart 0.5) */
   priority?: number;
   changefreq?: 'daily' | 'weekly' | 'monthly' | 'yearly';
-  /** If true, excluded from sitemap */
+  /** Agar true boʻlsa, sitemapdan chiqarib tashlanadi */
   noindex?: boolean;
-  /** SEO metadata — if present, this route gets a prerendered HTML page at build time. */
+  /** SEO metamaʼlumotlari — agar mavjud boʻlsa, bu marshrut qurilish vaqtida oldindan tayyorlangan HTML sahifasini oladi. */
   seoMeta?: SeoMeta;
 }
 
-/** Look up the SEO metadata for a given path. */
+/** Berilgan yoʻl uchun SEO metamaʼlumotlarini qidirish. */
 export function getSeoMeta(path: string): SeoMeta | undefined {
   return SEO_ROUTES.find(r => r.path === path)?.seoMeta;
 }
 
 export const SEO_ROUTES: SeoRoute[] = [
-  // ── Main pages
+  // ── Asosiy sahifalar
   {
     path: '/',
     priority: 1.0,
     changefreq: 'weekly',
     seoMeta: {
-      title: 'Velxio — Free Multi-Board Emulator | Arduino · ESP32 · RP2040 · RISC-V · Raspberry Pi',
-      description: 'Velxio is a free, open-source multi-board emulator. 19 boards across 5 CPU architectures: Arduino Uno/Mega/ATtiny (AVR8), ESP32/ESP32-S3 (Xtensa QEMU), ESP32-C3/CH32V003 (RISC-V), Raspberry Pi Pico (RP2040), Raspberry Pi 3 (Linux). 48+ components, no cloud.',
+      title: 'Robo Mentor — Bepul Koʻp Platli Emulator | Arduino · ESP32 · RP2040 · RISC-V · Raspberry Pi',
+      description: 'Robo Mentor — bepul, ochiq manbali koʻp platli emulator. 5 protsessor arxitekturasida 19 ta plata: Arduino Uno/Mega/ATtiny (AVR8), ESP32/ESP32-S3 (Xtensa QEMU), ESP32-C3/CH32V003 (RISC-V), Raspberry Pi Pico (RP2040), Raspberry Pi 3 (Linux). 48+ komponent, bulut talab qilinmaydi.',
       url: `${DOMAIN}/`,
     },
   },
@@ -51,50 +51,50 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.8,
     changefreq: 'weekly',
     seoMeta: {
-      title: 'Arduino Simulator Examples — Run 18+ Sketches Instantly | Velxio',
-      description: 'Explore 18+ interactive Arduino examples with LEDs, sensors, displays, and games. Runs entirely in your browser — free, no install, no account required.',
+      title: 'Arduino Simulyatori Misollari — 18+ Sketchni Bir Zumda Ishga Tushiring | Robo Mentor',
+      description: 'LEDlar, datchiklar, displeylar va oʻyinlar bilan 18+ interaktiv Arduino misollarini koʻring. Toʻliq brauzeringizda ishlaydi — bepul, oʻrnatish talab qilinmaydi, akkaunt kerak emas.',
       url: `${DOMAIN}/examples`,
     },
   },
 
-  // ── Documentation
+  // ── Hujjatlar
   { path: '/docs', priority: 0.8, changefreq: 'monthly',
-    seoMeta: { title: 'Introduction | Velxio Documentation', description: 'Learn about Velxio, the free open-source Arduino emulator with real AVR8 and RP2040 CPU emulation and 48+ interactive electronic components.', url: `${DOMAIN}/docs` } },
+    seoMeta: { title: 'Kirish | Robo Mentor Hujjatlari', description: 'Robo Mentor haqida bilib oling — bepul va ochiq manbali Arduino emulatori, AVR8 va RP2040 protsessorlari va 48+ interaktiv elektron komponentlari bilan.', url: `${DOMAIN}/docs` } },
   { path: '/docs/intro', priority: 0.8, changefreq: 'monthly',
-    seoMeta: { title: 'Introduction | Velxio Documentation', description: 'Learn about Velxio, the free open-source Arduino emulator with real AVR8 and RP2040 CPU emulation and 48+ interactive electronic components.', url: `${DOMAIN}/docs/intro` } },
+    seoMeta: { title: 'Kirish | Robo Mentor Hujjatlari', description: 'Robo Mentor haqida bilib oling — bepul va ochiq manbali Arduino emulatori, AVR8 va RP2040 protsessorlari va 48+ interaktiv elektron komponentlari bilan.', url: `${DOMAIN}/docs/intro` } },
   { path: '/docs/getting-started', priority: 0.8, changefreq: 'monthly',
-    seoMeta: { title: 'Getting Started | Velxio Documentation', description: 'Get started with Velxio: use the hosted editor, self-host with Docker, or set up a local development environment. Simulate your first Arduino sketch in minutes.', url: `${DOMAIN}/docs/getting-started` } },
+    seoMeta: { title: 'Boshlash | Robo Mentor Hujjatlari', description: 'Robo Mentor bilan ishni boshlang: veb-muharrirdan foydalaning, Docker bilan oʻz serveringizda ishga tushiring yoki mahalliy muhitni sozlang. Bir necha daqiqada birinchi sketchni simulyatsiya qiling.', url: `${DOMAIN}/docs/getting-started` } },
   { path: '/docs/emulator', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'Emulator Architecture | Velxio Documentation', description: 'How Velxio emulates AVR8 (ATmega328p), RP2040, and RISC-V (ESP32-C3) CPUs. Covers execution loops, peripherals, and pin mapping for all supported boards.', url: `${DOMAIN}/docs/emulator` } },
+    seoMeta: { title: 'Emulator Arxitekturasi | Robo Mentor Hujjatlari', description: 'Robo Mentor qanday qilib AVR8 (ATmega328p), RP2040 va RISC-V (ESP32-C3) protsessorlarini emulyatsiya qiladi. Bajarilish sikli, periferiya qurilmalari va barcha qoʻllab-quvvatlanadigan platlar uchun pin xaritasi haqida batafsil.', url: `${DOMAIN}/docs/emulator` } },
   { path: '/docs/esp32-emulation', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'ESP32 Emulation (Xtensa) | Velxio Documentation', description: 'QEMU-based emulation for ESP32 and ESP32-S3 (Xtensa LX6/LX7). Covers the lcgamboa fork, libqemu-xtensa, GPIO, WiFi, I2C, SPI, RMT/NeoPixel, and LEDC/PWM.', url: `${DOMAIN}/docs/esp32-emulation` } },
+    seoMeta: { title: 'ESP32 Emulyatsiyasi (Xtensa) | Robo Mentor Hujjatlari', description: 'ESP32 va ESP32-S3 (Xtensa LX6/LX7) uchun QEMU asosidagi emulyatsiya. lcgamboa fork, libqemu-xtensa, GPIO, WiFi, I2C, SPI, RMT/NeoPixel va LEDC/PWM haqida.', url: `${DOMAIN}/docs/esp32-emulation` } },
   { path: '/docs/riscv-emulation', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'RISC-V Emulation (ESP32-C3) | Velxio Documentation', description: 'Browser-side RV32IMC emulator for ESP32-C3, XIAO ESP32-C3, and C3 SuperMini. Covers memory map, GPIO, UART0, the ESP32 image parser, RV32IMC ISA, and test suite.', url: `${DOMAIN}/docs/riscv-emulation` } },
+    seoMeta: { title: 'RISC-V Emulyatsiyasi (ESP32-C3) | Robo Mentor Hujjatlari', description: 'Brauzerda RV32IMC emulyatori ESP32-C3, XIAO ESP32-C3 va C3 SuperMini uchun. Xotira xaritasi, GPIO, UART0, ESP32 tasvir tahlilchisi, RV32IMC buyruq tizimi va testlar toʻplami.', url: `${DOMAIN}/docs/riscv-emulation` } },
   { path: '/docs/rp2040-emulation', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'RP2040 Emulation (Raspberry Pi Pico) | Velxio Documentation', description: 'How Velxio emulates the Raspberry Pi Pico and Pico W using rp2040js: ARM Cortex-M0+ at 133 MHz, GPIO, UART, ADC, I2C, SPI, PWM and WFI optimization.', url: `${DOMAIN}/docs/rp2040-emulation` } },
+    seoMeta: { title: 'RP2040 Emulyatsiyasi (Raspberry Pi Pico) | Robo Mentor Hujjatlari', description: 'Robo Mentor qanday qilib Raspberry Pi Pico va Pico W ni rp2040js yordamida emulyatsiya qiladi: ARM Cortex-M0+ 133 MHz, GPIO, UART, ADC, I2C, SPI, PWM va WFI optimizatsiyasi.', url: `${DOMAIN}/docs/rp2040-emulation` } },
   { path: '/docs/raspberry-pi3-emulation', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'Raspberry Pi 3 Emulation (QEMU) | Velxio Documentation', description: 'How Velxio emulates a full Raspberry Pi 3B using QEMU raspi3b: real Raspberry Pi OS, Python + RPi.GPIO shim, dual-channel UART, VFS, and multi-board serial bridge.', url: `${DOMAIN}/docs/raspberry-pi3-emulation` } },
+    seoMeta: { title: 'Raspberry Pi 3 Emulyatsiyasi (QEMU) | Robo Mentor Hujjatlari', description: 'Robo Mentor qanday qilib Raspberry Pi 3B ni QEMU raspi3b yordamida emulyatsiya qiladi: haqiqiy Raspberry Pi OS, Python + RPi.GPIO shim, ikki kanalli UART, VFS va koʻp platli ketma-ket koʻprik.', url: `${DOMAIN}/docs/raspberry-pi3-emulation` } },
   { path: '/docs/components', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'Components Reference | Velxio Documentation', description: 'Full reference for all 48+ interactive electronic components in Velxio: LEDs, displays, sensors, buttons, potentiometers, and more. Includes wiring and property details.', url: `${DOMAIN}/docs/components` } },
+    seoMeta: { title: 'Komponentlar Maʼlumotnomasi | Robo Mentor Hujjatlari', description: 'Robo Mentordagi 48+ interaktiv elektron komponentlari uchun toʻliq maʼlumotnoma: LEDlar, displeylar, datchiklar, tugmalar, potensiometrlar va boshqalar. Ulanish va xususiyat tafsilotlarini oʻz ichiga oladi.', url: `${DOMAIN}/docs/components` } },
   { path: '/docs/architecture', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'Project Architecture | Velxio Documentation', description: 'Detailed overview of the Velxio system architecture: frontend, backend, AVR8 emulation pipeline, data flows, Zustand stores, and wire system.', url: `${DOMAIN}/docs/architecture` } },
+    seoMeta: { title: 'Loyiha Arxitekturasi | Robo Mentor Hujjatlari', description: 'Robo Mentor tizim arxitekturasining batafsil tavsifi: frontend, backend, AVR8 emulyatsiya jarayoni, maʼlumotlar oqimi, Zustand doʻkonlari va sim tizimi.', url: `${DOMAIN}/docs/architecture` } },
   { path: '/docs/wokwi-libs', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'Wokwi Libraries | Velxio Documentation', description: 'How Velxio integrates the official Wokwi open-source libraries: avr8js, wokwi-elements, and rp2040js. Covers configuration, updates, and the 48 available components.', url: `${DOMAIN}/docs/wokwi-libs` } },
+    seoMeta: { title: 'Wokwi Kutubxonalari | Robo Mentor Hujjatlari', description: 'Robo Mentor rasmiy Wokwi ochiq manbali kutubxonalarini qanday integratsiya qiladi: avr8js, wokwi-elements va rp2040js. Sozlamalar, yangilash va 48 ta komponent haqida.', url: `${DOMAIN}/docs/wokwi-libs` } },
   { path: '/docs/mcp', priority: 0.7, changefreq: 'monthly',
-    seoMeta: { title: 'MCP Server | Velxio Documentation', description: 'Velxio MCP Server reference: integrate AI agents (Claude, Cursor) with Velxio via Model Context Protocol. Covers tools, transports, circuit format, and example walkthroughs.', url: `${DOMAIN}/docs/mcp` } },
+    seoMeta: { title: 'MCP Server | Robo Mentor Hujjatlari', description: 'Robo Mentor MCP serveri referansi: AI agentlarni (Claude, Cursor) Robo Mentor bilan integratsiya qilish. Asboblar, transport, sxema formati va misollar.', url: `${DOMAIN}/docs/mcp` } },
   { path: '/docs/setup', priority: 0.6, changefreq: 'monthly',
-    seoMeta: { title: 'Project Status | Velxio Documentation', description: 'Complete status of all implemented Velxio features: AVR emulation, component system, wire system, code editor, example projects, and next steps.', url: `${DOMAIN}/docs/setup` } },
+    seoMeta: { title: 'Loyiha Holati | Robo Mentor Hujjatlari', description: 'Robo Mentorning barcha amalga oshirilgan xususiyatlarining toʻliq holati: AVR emulyatsiyasi, komponent tizimi, sim tizimi, kod muharriri, misol loyihalar va keyingi qadamlar.', url: `${DOMAIN}/docs/setup` } },
   { path: '/docs/roadmap', priority: 0.6, changefreq: 'monthly',
-    seoMeta: { title: 'Roadmap | Velxio Documentation', description: "Velxio's feature roadmap: what's implemented, what's in progress, and what's planned for future releases.", url: `${DOMAIN}/docs/roadmap` } },
+    seoMeta: { title: 'Reja | Robo Mentor Hujjatlari', description: 'Robo Mentor loyihasining rejasi: nimalar amalga oshirilgan, nimalar bajarilmoqda va kelajakda qanday xususiyatlar qoʻshiladi.', url: `${DOMAIN}/docs/roadmap` } },
 
-  // ── SEO keyword landing pages
+  // ── SEO kalit soʻz ochilish sahifalari
   {
     path: '/arduino-simulator',
     priority: 0.9,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free Online Arduino Simulator — Run Sketches in Your Browser | Velxio',
-      description: 'A free online Arduino simulator with real AVR8 emulation. Write and simulate Arduino code with LEDs, sensors, and 48+ components — no install, no account, instant results.',
+      title: 'Bepul Onlayn Arduino Simulyatori — Brauzeringizda Sketchni Ishga Tushiring | Robo Mentor',
+      description: 'Haqiqiy AVR8 emulyatsiyasiga ega bepul onlayn Arduino simulyatori. Arduino kodini yozing va LEDlar, datchiklar va 48+ komponent bilan simulyatsiya qiling — oʻrnatish yoʻq, akkaunt kerak emas, natijalar bir zumda.',
       url: `${DOMAIN}/arduino-simulator`,
     },
   },
@@ -103,8 +103,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.9,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Arduino Emulator — Real AVR8 & RP2040 Emulation, Free | Velxio',
-      description: 'Free, open-source Arduino emulator with cycle-accurate AVR8 emulation at 16 MHz. Emulate Arduino Uno, Nano, Mega and Raspberry Pi Pico in your browser — no cloud, no install.',
+      title: 'Arduino Emulatori — Haqiqiy AVR8 va RP2040 Emulyatsiyasi, Bepul | Robo Mentor',
+      description: '16 MHz da tsikl-aniq AVR8 emulyatsiyasiga ega bepul, ochiq manbali Arduino emulatori. Arduino Uno, Nano, Mega va Raspberry Pi Piconi brauzeringizda emulyatsiya qiling — bulut yoʻq, oʻrnatish yoʻq.',
       url: `${DOMAIN}/arduino-emulator`,
     },
   },
@@ -113,8 +113,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'ATmega328P Simulator — Free Browser-Based AVR8 Emulation | Velxio',
-      description: 'Simulate ATmega328P code in your browser. Full AVR8 emulation at 16 MHz — PORTB, PORTC, PORTD, Timer0/1/2, ADC, USART — with 48+ interactive components. Free & open-source.',
+      title: 'ATmega328P Simulyatori — Bepul Brauzer Asosidagi AVR8 Emulyatsiyasi | Robo Mentor',
+      description: 'ATmega328P kodini brauzeringizda simulyatsiya qiling. 16 MHz da toʻliq AVR8 emulyatsiyasi — PORTB, PORTC, PORTD, Timer0/1/2, ADC, USART — 48+ interaktiv komponent bilan. Bepul va ochiq manba.',
       url: `${DOMAIN}/atmega328p-simulator`,
     },
   },
@@ -123,8 +123,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Arduino Mega 2560 Simulator — Free Online AVR8 Emulator | Velxio',
-      description: 'Simulate Arduino Mega 2560 (ATmega2560) code for free in your browser. 256 KB flash, 54 digital pins, 16 analog inputs, 4 serial ports — full AVR8 emulation with 48+ components.',
+      title: 'Arduino Mega 2560 Simulyatori — Bepul Onlayn AVR8 Emulatori | Robo Mentor',
+      description: 'Arduino Mega 2560 (ATmega2560) kodini brauzeringizda bepul simulyatsiya qiling. 256 KB xotira, 54 raqamli pin, 16 analog kirish, 4 ketma-ket port — 48+ komponent bilan toʻliq AVR8 emulyatsiyasi.',
       url: `${DOMAIN}/arduino-mega-simulator`,
     },
   },
@@ -133,8 +133,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.9,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free ESP32 Simulator Online — Xtensa LX6 Emulation | Velxio',
-      description: 'Simulate ESP32 code in your browser for free. Real Xtensa LX6 emulation at 240 MHz via QEMU — ESP32 DevKit, ESP32-S3, ESP32-CAM. 48+ components, Serial Monitor, no install.',
+      title: 'Bepul Onlayn ESP32 Simulyatori — Xtensa LX6 Emulyatsiyasi | Robo Mentor',
+      description: 'ESP32 kodini brauzeringizda bepul simulyatsiya qiling. QEMU orqali 240 MHz da haqiqiy Xtensa LX6 emulyatsiyasi — ESP32 DevKit, ESP32-S3, ESP32-CAM. 48+ komponent, Serial Monitor, oʻrnatish yoʻq.',
       url: `${DOMAIN}/esp32-simulator`,
     },
   },
@@ -143,8 +143,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free ESP32-S3 Simulator — Xtensa LX7 Emulation Online | Velxio',
-      description: 'Simulate ESP32-S3 code for free. Real Xtensa LX7 dual-core emulation at 240 MHz via QEMU — DevKitC, XIAO ESP32-S3, Arduino Nano ESP32. 48+ components, no install.',
+      title: 'Bepul ESP32-S3 Simulyatori — Xtensa LX7 Onlayn Emulyatsiyasi | Robo Mentor',
+      description: 'ESP32-S3 kodini bepul simulyatsiya qiling. QEMU orqali 240 MHz da haqiqiy Xtensa LX7 ikki yadroli emulyatsiyasi — DevKitC, XIAO ESP32-S3, Arduino Nano ESP32. 48+ komponent, oʻrnatish yoʻq.',
       url: `${DOMAIN}/esp32-s3-simulator`,
     },
   },
@@ -153,8 +153,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free ESP32-C3 & RISC-V Simulator — Browser-Native Emulation | Velxio',
-      description: 'Simulate ESP32-C3 RISC-V code directly in your browser — no backend needed. RV32IMC at 160 MHz, 48+ components, Serial Monitor. Also supports CH32V003. Free and open-source.',
+      title: 'Bepul ESP32-C3 va RISC-V Simulyatori — Brauzer Asosidagi Emulyatsiya | Robo Mentor',
+      description: 'ESP32-C3 RISC-V kodini toʻgʻridan-toʻgʻri brauzeringizda simulyatsiya qiling — backend kerak emas. 160 MHz da RV32IMC, 48+ komponent, Serial Monitor. CH32V003 ni ham qoʻllab-quvvatlaydi. Bepul va ochiq manba.',
       url: `${DOMAIN}/esp32-c3-simulator`,
     },
   },
@@ -163,8 +163,8 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.9,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free Raspberry Pi Pico Simulator — RP2040 ARM Cortex-M0+ Emulation | Velxio',
-      description: 'Simulate Raspberry Pi Pico and Pico W code for free. Real RP2040 ARM Cortex-M0+ emulation at 133 MHz via rp2040js. 48+ components, Serial Monitor, Arduino-Pico core. No install.',
+      title: 'Bepul Raspberry Pi Pico Simulyatori — RP2040 ARM Cortex-M0+ Emulyatsiyasi | Robo Mentor',
+      description: 'Raspberry Pi Pico va Pico W kodini bepul simulyatsiya qiling. rp2040js orqali 133 MHz da haqiqiy RP2040 ARM Cortex-M0+ emulyatsiyasi. 48+ komponent, Serial Monitor, Arduino-Pico yadrosi. Oʻrnatish yoʻq.',
       url: `${DOMAIN}/raspberry-pi-pico-simulator`,
     },
   },
@@ -173,37 +173,37 @@ export const SEO_ROUTES: SeoRoute[] = [
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Free Raspberry Pi 3 Simulator — Full Linux Emulation in Your Browser | Velxio',
-      description: 'Simulate Raspberry Pi 3 for free. Full ARM Cortex-A53 Linux emulation via QEMU — run Python, bash, RPi.GPIO in your browser. No Raspberry Pi hardware needed.',
+      title: 'Bepul Raspberry Pi 3 Simulyatori — Brauzeringizda Toʻliq Linux Emulyatsiyasi | Robo Mentor',
+      description: 'Raspberry Pi 3 ni bepul simulyatsiya qiling. QEMU orqali toʻliq ARM Cortex-A53 Linux emulyatsiyasi — brauzeringizda Python, bash, RPi.GPIO ni ishga tushiring. Raspberry Pi apparati kerak emas.',
       url: `${DOMAIN}/raspberry-pi-simulator`,
     },
   },
 
-  // ── Release pages
+  // ── Reliz sahifalari
   {
     path: '/v2',
     priority: 0.9,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'Velxio 2.0 — Multi-Board Embedded Simulator | ESP32, Raspberry Pi, Arduino, RISC-V',
-      description: 'Velxio 2.0 is here. Simulate Arduino, ESP32, Raspberry Pi Pico, and Raspberry Pi 3 in your browser. 19 boards, 68+ examples, realistic sensor simulation. Free and open-source.',
+      title: 'Robo Mentor 2.0 — Koʻp Platli Oʻrnatilgan Tizim Simulyatori | ESP32, Raspberry Pi, Arduino, RISC-V',
+      description: 'Robo Mentor 2.0 taqdim etildi. Brauzeringizda Arduino, ESP32, Raspberry Pi Pico va Raspberry Pi 3 ni simulyatsiya qiling. 19 plata, 68+ misol, realistik datchik simulyatsiyasi. Bepul va ochiq manba.',
       url: `${DOMAIN}/v2`,
     },
   },
 
-  // ── About
+  // ── Loyiha haqida
   {
     path: '/about',
     priority: 0.7,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'About Velxio — Open Source Embedded Emulator by David Montero Crespo',
-      description: 'Learn about Velxio, the free open-source multi-board embedded emulator, and its creator David Montero Crespo — Application Architect at IBM, programming and robotics enthusiast.',
+      title: 'Robo Mentor Haqida — Ochiq Manbali Oʻrnatilgan Tizim Emulatori',
+      description: 'Robo Mentor haqida bilib oling — bepul ochiq manbali koʻp platli oʻrnatilgan tizim emulatori. Dasturchilar, talabalar va robototexnika ixlosmandlari uchun yaratilgan.',
       url: `${DOMAIN}/about`,
     },
   },
 
-  // ── Auth / admin (noindex)
+  // ── Auth / admin (noindex — qidiruv tizimlaridan yashirish)
   { path: '/login',    noindex: true },
   { path: '/register', noindex: true },
   { path: '/admin',    noindex: true },

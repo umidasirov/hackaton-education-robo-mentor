@@ -25,15 +25,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Is this also a RISC-V simulator?',
-    a: 'Yes. The ESP32-C3 uses the RISC-V RV32IMC instruction set. Velxio also supports the CH32V003 (RV32EC at 48 MHz) — another popular RISC-V microcontroller.',
+    a: 'Yes. The ESP32-C3 uses the RISC-V RV32IMC instruction set. vexio also supports the CH32V003 (RV32EC at 48 MHz) — another popular RISC-V microcontroller.',
   },
   {
     q: 'Which ESP32-C3 boards are supported?',
-    a: 'Velxio supports ESP32-C3 DevKitM-1, Seeed XIAO ESP32-C3, and ESP32-C3 SuperMini (Aitewinrobot). All three use the same RISC-V core.',
+    a: 'vexio supports ESP32-C3 DevKitM-1, Seeed XIAO ESP32-C3, and ESP32-C3 SuperMini (Aitewinrobot). All three use the same RISC-V core.',
   },
   {
     q: 'Can I use Arduino code with ESP32-C3?',
-    a: 'Yes. Velxio compiles your .ino sketch using the official ESP32 Arduino core with the ESP32-C3 board target. All standard Arduino functions work — Serial, GPIO, analogRead, etc.',
+    a: 'Yes. vexio compiles your .ino sketch using the official ESP32 Arduino core with the ESP32-C3 board target. All standard Arduino functions work — Serial, GPIO, analogRead, etc.',
   },
 ];
 
@@ -41,12 +41,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free ESP32-C3 & RISC-V Simulator',
+    name: 'vexio — Free ESP32-C3 & RISC-V Simulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online ESP32-C3 RISC-V simulator. Browser-native RV32IMC emulation at 160 MHz — no backend, no install. Simulate ESP32-C3 DevKit, XIAO ESP32-C3, SuperMini, and CH32V003.',
-    url: 'https://velxio.dev/esp32-c3-simulator',
+    url: 'https://simulyator.adxamov.uz/esp32-c3-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
   },
@@ -63,8 +63,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'ESP32-C3 Simulator', item: 'https://velxio.dev/esp32-c3-simulator' },
+      { '@type': 'ListItem', position: 1, name: 'vexio', item: 'https://simulyator.adxamov.uz/' },
+      { '@type': 'ListItem', position: 2, name: 'ESP32-C3 Simulator', item: 'https://simulyator.adxamov.uz/esp32-c3-simulator' },
     ],
   },
 ];
@@ -96,7 +96,7 @@ export const Esp32C3SimulatorPage: React.FC = () => {
         <section className="seo-section">
           <h2>Supported RISC-V boards</h2>
           <p className="lead">
-            Velxio emulates RISC-V microcontrollers natively in the browser using WebAssembly — the fastest simulation path available, no server round-trip.
+            vexio emulates RISC-V microcontrollers natively in the browser using WebAssembly — the fastest simulation path available, no server round-trip.
           </p>
           <div className="seo-grid">
             <div className="seo-card">

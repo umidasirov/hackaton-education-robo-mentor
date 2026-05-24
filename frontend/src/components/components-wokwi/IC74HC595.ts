@@ -1,7 +1,7 @@
 /**
  * wokwi-74hc595 — 8-bit Serial-to-Parallel Shift Register (SN74HC595)
  *
- * DIP-16 package custom element for use in Velxio/Wokwi simulations.
+ * DIP-16 package custom element for use in vexio/Wokwi simulations.
  */
 
 class IC74HC595Element extends HTMLElement {

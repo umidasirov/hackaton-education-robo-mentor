@@ -1,4 +1,5 @@
 import { PartSimulationRegistry } from './PartSimulationRegistry';
+import { SIM_PIN_GND, SIM_PIN_VCC } from '../simPowerConstants';
 
 /**
  * Basic Pushbutton implementation (full-size)
@@ -130,6 +131,9 @@ PartSimulationRegistry.register('dip-switch-8', {
  * An LED lights up only when current can flow: anode HIGH **and** cathode
  * connected to GND (or a LOW GPIO).  If the cathode is not wired at all the
  * LED stays off regardless of the anode state.
+ *
+ * PWM (`analogWrite`): uses wokwi-led `brightness` (0–1) so dimming is smooth;
+ * digital toggling on the same pin is ignored while PWM is active to avoid flicker.
  */
 PartSimulationRegistry.register('led', {
     attachEvents: (element, simulator, getArduinoPinHelper) => {
@@ -138,35 +142,78 @@ PartSimulationRegistry.register('led', {
 
         const el = element as any;
         const unsubs: (() => void)[] = [];
-        let anodeHigh  = false;
+        let anodeHigh = false;
         let cathodeLow = false;
+        /** True after first PWM sample on this anode — then we drive brightness from duty, not raw digital edges. */
+        let pwmActive = false;
+        let lastPwmDuty = 0;
 
-        const update = () => { el.value = anodeHigh && cathodeLow; };
+        const anodePinResolved = getArduinoPinHelper('A');
+
+        const apply = () => {
+            if (!cathodeLow) {
+                el.value = false;
+                el.brightness = 0;
+                return;
+            }
+
+            if (anodePinResolved === SIM_PIN_VCC) {
+                el.value = true;
+                el.brightness = 1;
+                return;
+            }
+            if (anodePinResolved !== null && anodePinResolved >= 0) {
+                if (pwmActive) {
+                    const d = lastPwmDuty;
+                    el.value = d > 0.001;
+                    el.brightness = Math.max(0, Math.min(1, d));
+                    return;
+                }
+                el.value = anodeHigh;
+                el.brightness = anodeHigh ? 1 : 0;
+            }
+        };
 
         // Cathode pin: -1 means wired to GND (always LOW), >=0 means GPIO
         const cathodePin = getArduinoPinHelper('C');
-        if (cathodePin === -1) {
-            // Wired to GND — always LOW
+        if (cathodePin === SIM_PIN_GND) {
             cathodeLow = true;
         } else if (cathodePin !== null && cathodePin >= 0) {
-            // Wired to a GPIO — track its state
             unsubs.push(pinManager.onPinChange(cathodePin, (_: number, state: boolean) => {
-                cathodeLow = !state; // cathode needs to be LOW for current to flow
-                update();
+                cathodeLow = !state;
+                apply();
             }));
         }
-        // cathodePin === null → not wired → cathodeLow stays false → LED off
 
-        // Anode pin
-        const anodePin = getArduinoPinHelper('A');
-        if (anodePin !== null && anodePin >= 0) {
-            unsubs.push(pinManager.onPinChange(anodePin, (_: number, state: boolean) => {
+        if (anodePinResolved === SIM_PIN_VCC) {
+            apply();
+        } else if (anodePinResolved !== null && anodePinResolved >= 0) {
+            unsubs.push(pinManager.onPwmChange(anodePinResolved, (_: number, duty: number) => {
+                pwmActive = true;
+                lastPwmDuty = duty;
+                apply();
+            }));
+            unsubs.push(pinManager.onPinChange(anodePinResolved, (_: number, state: boolean) => {
+                if (pwmActive) return;
                 anodeHigh = state;
-                update();
+                apply();
             }));
+            const initialDuty = typeof pinManager.getPwmValue === 'function'
+                ? pinManager.getPwmValue(anodePinResolved)
+                : 0;
+            if (initialDuty > 0.001) {
+                pwmActive = true;
+                lastPwmDuty = initialDuty;
+            }
+            apply();
         }
 
-        return () => { unsubs.forEach(u => u()); };
+        return () => {
+            unsubs.forEach(u => u());
+            el.value = false;
+            el.brightness = 1;
+            el.style.opacity = '';
+        };
     },
 });
 
@@ -454,5 +501,18 @@ PartSimulationRegistry.register('rotary-dialer', {
             element.removeEventListener('dial-start', onDialStart);
             element.removeEventListener('dial-end',   onDialEnd);
         };
+    },
+});
+
+/**
+ * Breadboard — passiv komponent (400 tie points)
+ * Hech qanday elektron simulyatsiya logikasi kerak emas.
+ * Simlar breadboard pinlariga to'g'ridan-to'g'ri ulanadi.
+ * Bir xil ustundagi pinlar (a–e yoki f–j) bir-biri bilan ulanadi.
+ */
+PartSimulationRegistry.register('breadboard', {
+    onPinStateChange: (_pinName: string, _state: boolean, _element: HTMLElement) => {
+        // Breadboard passiv — har qanday signal avtomatik o'tadi
+        // Simulyatsiya uchun hech narsa kerak emas
     },
 });

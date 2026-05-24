@@ -1,0 +1,811 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { AppHeader } from '../components/layout/AppHeader';
+import { CodeBlock } from '../components/layout/CodeBlock';
+import './DocsPage.css';
+
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/robomentor';
+const BASE_URL = 'https://robomentor.uz';
+const AUTHOR = { '@type': 'Person', name: 'Robo Mentor Jamoasi', url: 'https://robomentor.uz' } as const;
+
+/* ── Ikonkalar ─────────────────────────────────────────────── */
+const IcoGitHub = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
+/* ── Hujjat bo‘limlari ──────────────────────────────────────── */
+type SectionId =
+  | 'intro'
+  | 'getting-started'
+  | 'emulator'
+  | 'riscv-emulation'
+  | 'esp32-emulation'
+  | 'rp2040-emulation'
+  | 'raspberry-pi3-emulation'
+  | 'components'
+  | 'roadmap'
+  | 'architecture'
+  | 'wokwi-libs'
+  | 'mcp'
+  | 'setup';
+
+const VALID_SECTIONS: SectionId[] = [
+  'intro',
+  'getting-started',
+  'emulator',
+  'riscv-emulation',
+  'esp32-emulation',
+  'rp2040-emulation',
+  'raspberry-pi3-emulation',
+  'components',
+  'roadmap',
+  'architecture',
+  'wokwi-libs',
+  'mcp',
+  'setup',
+];
+
+interface NavItem {
+  id: SectionId;
+  label: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { id: 'intro', label: 'Kirish' },
+  { id: 'getting-started', label: 'Boshlash' },
+  { id: 'emulator', label: 'Emulator Arxitekturasi' },
+  { id: 'riscv-emulation', label: 'RISC-V Emulyatsiyasi (ESP32-C3)' },
+  { id: 'esp32-emulation', label: 'ESP32 Emulyatsiyasi (Xtensa)' },
+  { id: 'rp2040-emulation', label: 'RP2040 Emulyatsiyasi (Raspberry Pi Pico)' },
+  { id: 'raspberry-pi3-emulation', label: 'Raspberry Pi 3 Emulyatsiyasi (QEMU)' },
+  { id: 'components', label: 'Komponentlar Maʼlumotnomasi' },
+  { id: 'architecture', label: 'Loyiha Arxitekturasi' },
+  { id: 'wokwi-libs', label: 'Wokwi Kutubxonalari' },
+  { id: 'mcp', label: 'MCP Server' },
+  { id: 'setup', label: 'Loyiha Holati' },
+  { id: 'roadmap', label: 'Reja' },
+];
+
+/* ── Har bir bo‘lim uchun SEO metamaʼlumotlar ──────────────────────────── */
+interface SectionMeta { title: string; description: string; }
+const SECTION_META: Record<SectionId, SectionMeta> = {
+  'intro': {
+    title: 'Kirish | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor haqida bilib oling — bepul va ochiq manbali Arduino emulatori, AVR8 va RP2040 protsessorlari va 48+ interaktiv elektron komponentlari bilan.',
+  },
+  'getting-started': {
+    title: 'Boshlash | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor bilan ishni boshlang: veb-muharrirdan foydalaning, Docker bilan oʻz serveringizda ishga tushiring yoki mahalliy muhitni sozlang.',
+  },
+  'emulator': {
+    title: 'Emulator Arxitekturasi | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor qanday qilib AVR8 (ATmega328p), RP2040 va RISC-V (ESP32-C3) protsessorlarini emulyatsiya qiladi.',
+  },
+  'riscv-emulation': {
+    title: 'RISC-V Emulyatsiyasi (ESP32-C3) | Robo Mentor Hujjatlari',
+    description: 'Brauzerda RV32IMC emulyatori ESP32-C3, XIAO ESP32-C3 va C3 SuperMini uchun.',
+  },
+  'esp32-emulation': {
+    title: 'ESP32 Emulyatsiyasi (Xtensa) | Robo Mentor Hujjatlari',
+    description: 'ESP32 va ESP32-S3 (Xtensa LX6/LX7) uchun QEMU asosidagi emulyatsiya.',
+  },
+  'components': {
+    title: 'Komponentlar Maʼlumotnomasi | Robo Mentor Hujjatlari',
+    description: 'Robo Mentordagi 48+ interaktiv elektron komponentlari uchun toʻliq maʼlumotnoma.',
+  },
+  'roadmap': {
+    title: 'Reja | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor loyihasining rejasi: nimalar amalga oshirilgan, nimalar bajarilmoqda va kelajakda qanday xususiyatlar qoʻshiladi.',
+  },
+  'architecture': {
+    title: 'Loyiha Arxitekturasi | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor tizim arxitekturasining batafsil tavsifi.',
+  },
+  'wokwi-libs': {
+    title: 'Wokwi Kutubxonalari | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor rasmiy Wokwi ochiq manbali kutubxonalarini qanday integratsiya qiladi.',
+  },
+  'mcp': {
+    title: 'MCP Server | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor MCP serveri — AI agentlarni integratsiya qilish.',
+  },
+  'setup': {
+    title: 'Loyiha Holati | Robo Mentor Hujjatlari',
+    description: 'Robo Mentorning barcha amalga oshirilgan xususiyatlarining toʻliq holati.',
+  },
+  'rp2040-emulation': {
+    title: 'RP2040 Emulyatsiyasi (Raspberry Pi Pico) | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor qanday qilib Raspberry Pi Pico va Pico W ni rp2040js yordamida emulyatsiya qiladi.',
+  },
+  'raspberry-pi3-emulation': {
+    title: 'Raspberry Pi 3 Emulyatsiyasi (QEMU) | Robo Mentor Hujjatlari',
+    description: 'Robo Mentor qanday qilib Raspberry Pi 3B ni QEMU raspi3b yordamida emulyatsiya qiladi.',
+  },
+};
+
+/* ── Bo‘lim mazmuni ───────────────────────────────────── */
+const IntroSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// umumiy maʼlumot</span>
+    <h1>Kirish</h1>
+    <p>
+      <strong>Robo Mentor</strong> — bu brauzeringizda toʻliq ishlaydigan, ochiq manbali Arduino emulatori.
+      Arduino C++ kodini yozing, uni <code>arduino-cli</code> orqali kompilyatsiya qiling va
+      AVR8 / RP2040 protsessorlarining aniq emulyatsiyasi bilan simulyatsiya qiling.
+    </p>
+
+    <h2>Nima uchun Robo Mentor?</h2>
+    <ul>
+      <li><strong>O‘rnatish shart emas</strong>: hamma narsa brauzerda ishlaydi.</li>
+      <li><strong>Haqiqiy emulyatsiya</strong>: aniq AVR8 / RP2040 protsessor emulyatsiyasi.</li>
+      <li><strong>Interaktiv komponentlar</strong>: LEDlar, tugmalar, potensiometrlar, displeylar, datchiklar.</li>
+      <li><strong>Ochiq manba</strong>: kodni ko‘ring, o‘zgartiring va o‘z serveringizda ishlating.</li>
+    </ul>
+
+    <h2>Qo‘llab-quvvatlanadigan platlar</h2>
+    <table>
+      <thead>
+        <tr><th>Plata</th><th>Protsessor</th><th>Emulyator</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Arduino Uno</td><td>ATmega328p @ 16 MHz</td><td>avr8js</td></tr>
+        <tr><td>Arduino Nano</td><td>ATmega328p @ 16 MHz</td><td>avr8js</td></tr>
+        <tr><td>Arduino Mega</td><td>ATmega2560 @ 16 MHz</td><td>avr8js</td></tr>
+        <tr><td>Raspberry Pi Pico</td><td>RP2040 @ 133 MHz</td><td>rp2040js</td></tr>
+        <tr><td>ESP32-C3 / XIAO C3</td><td>RV32IMC @ 160 MHz</td><td>Esp32C3Simulator</td></tr>
+        <tr><td>ESP32 / ESP32-S3</td><td>Xtensa LX6/LX7 @ 240 MHz</td><td>QEMU</td></tr>
+      </tbody>
+    </table>
+
+    <div className="docs-callout">
+      <strong>Jonli namoyish:</strong>{' '}
+      <a href="https://robomentor.uz" target="_blank" rel="noopener noreferrer">robomentor.uz</a>
+    </div>
+  </div>
+);
+
+const GettingStartedSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// sozlash</span>
+    <h1>Boshlash</h1>
+    <p>Birinchi Arduino sketchni simulyatsiya qilish uchun quyidagi qadamlarni bajaring.</p>
+
+    <h2>1-usul: Veb-versiyadan foydalanish</h2>
+    <p>
+      <a href="https://robomentor.uz" target="_blank" rel="noopener noreferrer">https://robomentor.uz</a>{' '}
+      manziliga o‘ting va darhol kod yozishni boshlang.
+    </p>
+
+    <h2>2-usul: Docker bilan o‘z serveringizda ishga tushirish</h2>
+    <CodeBlock language="bash">{`docker run -d \\
+  --name robomentor \\
+  -p 3080:80 \\
+  -v $(pwd)/data:/app/data \\
+  ghcr.io/davidmonterocrespo24/robomentor:master`}</CodeBlock>
+    <p>Keyin brauzeringizda <strong>http://localhost:3080</strong> ni oching.</p>
+
+    <h2>3-usul: Qo‘lda sozlash</h2>
+    <p><strong>Talablar:</strong> Node.js 18+, Python 3.12+, <code>arduino-cli</code></p>
+
+    <h3>1. Repositoryni klonlash</h3>
+    <CodeBlock language="bash">{`git clone https://github.com/davidmonterocrespo24/robomentor.git
+cd robomentor`}</CodeBlock>
+
+    <h3>2. Backendni ishga tushirish</h3>
+    <CodeBlock language="bash">{`cd backend
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8001`}</CodeBlock>
+
+    <h3>3. Frontendni ishga tushirish</h3>
+    <CodeBlock language="bash">{`cd frontend
+npm install
+npm run dev`}</CodeBlock>
+
+    <h2>Birinchi simulyatsiyangiz</h2>
+    <ol>
+      <li><strong>Muharrirni oching</strong> — <a href="https://robomentor.uz/editor" target="_blank">robomentor.uz/editor</a></li>
+      <li><strong>Platani tanlang</strong> (masalan, <em>Arduino Uno</em>)</li>
+      <li><strong>Arduino kodini yozing</strong></li>
+    </ol>
+    <CodeBlock language="cpp">{`void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
+  delay(500);
+}`}</CodeBlock>
+    <ol start={4}>
+      <li><strong>"Kompilyatsiya" tugmasini bosing</strong></li>
+      <li><strong>"Ishga tushir" tugmasini bosing</strong></li>
+      <li><strong>Komponentlar qo‘shing</strong> — <strong>+</strong> tugmasi orqali</li>
+      <li><strong>Simlarni ulang</strong></li>
+    </ol>
+  </div>
+);
+
+const EmulatorSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// ichki tuzilish</span>
+    <h1>Emulator Arxitekturasi</h1>
+    <p>Robo Mentor <strong>haqiqiy protsessor emulyatsiyasi</strong> dan foydalanadi.</p>
+
+    <h2>Yuqori darajadagi maʼlumotlar oqimi</h2>
+    <CodeBlock language="text">{`Foydalanuvchi kodi (Monaco muharriri)
+        │
+        ▼
+   Zustand Do‘koni (useEditorStore)
+        │
+        ▼
+  FastAPI Backend ──► arduino-cli ──► .hex / .uf2 fayl
+        │
+        ▼
+  AVRSimulator / RP2040Simulator
+        │
+        ▼
+  Protsessor bajarilish sikli (~60 FPS)
+        │
+        ▼
+  Port kuzatuvchilari (PORTB / PORTC / PORTD)
+        │
+        ▼
+  PinManager ──► Komponent holati ──► React qayta chizish`}</CodeBlock>
+
+    <h2>AVR8 Emulyatsiyasi (Arduino Uno / Nano / Mega)</h2>
+    <p>AAR backend <a href="https://github.com/wokwi/avr8js" target="_blank">avr8js</a> dan foydalanadi.</p>
+
+    <h3>Bajarilish sikli</h3>
+    <p>Har bir kadr taxminan 267 000 protsessor sikli bajaradi:</p>
+    <CodeBlock language="typescript">{`avrInstruction(cpu);
+cpu.tick();`}</CodeBlock>
+
+    <h3>Qo‘llab-quvvatlanadigan periferiyalar</h3>
+    <table>
+      <thead><tr><th>Periferiya</th><th>Tafsilotlar</th></tr></thead>
+      <tbody>
+        <tr><td>GPIO</td><td>PORTB (8–13), PORTC (A0–A5), PORTD (0–7)</td></tr>
+        <tr><td>Timer0/1/2</td><td><code>millis()</code>, <code>delay()</code>, PWM</td></tr>
+        <tr><td>USART</td><td>Serial Monitor</td></tr>
+        <tr><td>ADC</td><td>10-bit, A0–A5</td></tr>
+        <tr><td>SPI / I2C</td><td>To‘liq qo‘llab-quvvatlash</td></tr>
+      </tbody>
+    </table>
+
+    <h2>RP2040 Emulyatsiyasi (Raspberry Pi Pico)</h2>
+    <p>RP2040 backend <a href="https://github.com/wokwi/rp2040js" target="_blank">rp2040js</a> dan foydalanadi.</p>
+    <ul>
+      <li>133 MHz da haqiqiy RP2040 emulyatsiyasi</li>
+      <li>UART0 serial chiqishi</li>
+      <li>12-bit ADC (GPIO 26–29)</li>
+    </ul>
+  </div>
+);
+
+const ComponentsSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// maʼlumotnoma</span>
+    <h1>Komponentlar Maʼlumotnomasi</h1>
+    <p>
+      Robo Mentor <strong>48+ interaktiv elektron komponenti</strong> bilan ishlaydi.
+      Barcha komponentlarni simulyatsiya maydoniga joylashtirish, simlar bilan ulash va Arduino kodi bilan boshqarish mumkin.
+    </p>
+
+    <h2>Komponent qo‘shish</h2>
+    <ol>
+      <li>Simulyatsiya maydonidagi <strong>+</strong> tugmasini bosing</li>
+      <li><strong>Qidiruv</strong> yoki <strong>kategoriya</strong> bo‘yicha komponentni toping</li>
+      <li>Komponentni maydonga joylashtirish uchun bosing</li>
+      <li><strong>Sudrab</strong> olib borib joylashtiring</li>
+    </ol>
+
+    <h2>Komponentlarni ulash</h2>
+    <ol>
+      <li>Komponentdagi <strong>pinni</strong> bosing</li>
+      <li><strong>Maqsad pinini</strong> bosing</li>
+      <li>Simlar <strong>rang-kodlangan</strong> holda chiziladi</li>
+    </ol>
+
+    <h3>Komponent kategoriyalari</h3>
+
+    <h4>Chiqish</h4>
+    <table><thead><tr><th>Komponent</th><th>Tavsif</th></tr></thead>
+    <tbody>
+      <tr><td>LED</td><td>Konfiguratsiya qilinadigan rangli LED</td></tr>
+      <tr><td>RGB LED</td><td>Uch rangli LED</td></tr>
+      <tr><td>7-Segment Displey</td><td>Bir xonali raqamli displey</td></tr>
+      <tr><td>LCD 16×2</td><td>2 qatorli matnli displey</td></tr>
+      <tr><td>Buzzer</td><td>Passiv piezo buzzer</td></tr>
+    </tbody></table>
+
+    <h4>Kirish</h4>
+    <table><thead><tr><th>Komponent</th><th>Tavsif</th></tr></thead>
+    <tbody>
+      <tr><td>Tugma</td><td>Momentli tugma</td></tr>
+      <tr><td>Potensiometr</td><td>Analog kuchlanish bo‘luvchi</td></tr>
+      <tr><td>Joystick</td><td>Ikki o‘qli analog joystick</td></tr>
+    </tbody></table>
+
+    <h4>Datchiklar</h4>
+    <table><thead><tr><th>Komponent</th><th>Tavsif</th></tr></thead>
+    <tbody>
+      <tr><td>HC-SR04</td><td>Ultrasonik masofa sensori</td></tr>
+      <tr><td>DHT22</td><td>Harorat va namlik sensori</td></tr>
+      <tr><td>PIR</td><td>Harakat sensori</td></tr>
+    </tbody></table>
+  </div>
+);
+
+const RoadmapSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// kelajak</span>
+    <h1>Reja</h1>
+
+    <h2>✅ Amalga oshirilgan</h2>
+    <ul>
+      <li>Monaco muharriri</li>
+      <li>Ko‘p faylli ish maydoni</li>
+      <li>Arduino kompilyatsiyasi (<code>arduino-cli</code>)</li>
+      <li>ATmega328p / ATmega2560 emulyatsiyasi (avr8js)</li>
+      <li>To‘liq GPIO, Taymerlar, USART, ADC, SPI, I2C</li>
+      <li>RP2040 emulyatsiyasi (rp2040js)</li>
+      <li>48+ komponent</li>
+      <li>Sim yaratish va tahrirlash</li>
+      <li>Serial Monitor</li>
+      <li>Kutubxonalar menejeri</li>
+      <li>Loyihalarni saqlash</li>
+      <li>8 ta misol loyiha</li>
+    </ul>
+
+    <h2>🔄 Bajarilmoqda</h2>
+    <ul>
+      <li>Funksional sim ulanishlari</li>
+      <li>Xatoliklarni qayta ishlash</li>
+    </ul>
+
+    <h2>🗓 Rejalashtirilgan</h2>
+    <ul>
+      <li>Bekor qilish / qaytarish</li>
+      <li>Loyihalarni <code>.zip</code> sifatida eksport/import</li>
+      <li>Qo‘shimcha platlar (ESP32, Arduino Leonardo)</li>
+      <li>Breadboard qo‘llab-quvvatlash</li>
+      <li>Ko‘proq datchik simulyatsiyalari</li>
+      <li>Multiplayer rejimi</li>
+    </ul>
+
+    <div className="docs-callout">
+      <strong>Hissa qo‘shmoqchimisiz?</strong>{' '}
+      <a href={GITHUB_URL} target="_blank">github.com/davidmonterocrespo24/robomentor</a>
+    </div>
+  </div>
+);
+
+const ArchitectureSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// tizim dizayni</span>
+    <h1>Loyiha Arxitekturasi</h1>
+
+    <h2>Yuqori darajadagi ko‘rinish</h2>
+    <CodeBlock language="text">{`Brauzer (React + Vite)
+  ├── Monaco muharriri ──► useEditorStore (Zustand)
+  ├── SimulatorCanvas ──► useSimulatorStore (Zustand)
+  │     ├── AVRSimulator (avr8js)
+  │     ├── RP2040Simulator (rp2040js)
+  │     ├── PinManager
+  │     └── 48+ wokwi-elements
+  └── HTTP (Axios) ──► FastAPI Backend (port 8001)
+        └── ArduinoCLIService ──► arduino-cli`}</CodeBlock>
+
+    <h2>Asosiy frontend do‘konlari</h2>
+    <table>
+      <thead><tr><th>Do‘kon</th><th>Maqsad</th></tr></thead>
+      <tbody>
+        <tr><td><code>useEditorStore</code></td><td>Ko‘p faylli ish maydoni</td></tr>
+        <tr><td><code>useSimulatorStore</code></td><td>Simulyatsiya + maydon holati</td></tr>
+        <tr><td><code>useAuthStore</code></td><td>Autentifikatsiya</td></tr>
+        <tr><td><code>useProjectStore</code></td><td>Ochiq loyiha</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Backend marshrutlari</h2>
+    <table>
+      <thead><tr><th>Marshrut</th><th>Tavsif</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST /api/compile/</code></td><td>Sketchni kompilyatsiya qilish</td></tr>
+        <tr><td><code>GET /api/compile/boards</code></td><td>Platlar ro‘yxati</td></tr>
+        <tr><td><code>GET/POST /api/auth/*</code></td><td>Autentifikatsiya</td></tr>
+        <tr><td><code>GET/POST /api/projects/*</code></td><td>Loyiha saqlash</td></tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+const WokwiLibsSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// ochiq manba kutubxonalar</span>
+    <h1>Wokwi Kutubxonalari</h1>
+    <p>Robo Mentor <code>wokwi-libs/</code> papkasida mahalliy klonlangan rasmiy Wokwi kutubxonalaridan foydalanadi.</p>
+
+    <h2>Klonlangan repositorylar</h2>
+    <table>
+      <thead><tr><th>Kutubxona</th><th>Maqsad</th></tr></thead>
+      <tbody>
+        <tr><td>wokwi-elements</td><td>48+ Lit Web komponentlari</td></tr>
+        <tr><td>avr8js</td><td>ATmega328p / ATmega2560 emulyatori</td></tr>
+        <tr><td>rp2040js</td><td>Raspberry Pi Pico emulyatori</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Kutubxonalarni yangilash</h2>
+    <CodeBlock language="bash">{`cd wokwi-libs/wokwi-elements
+git pull origin main
+npm install && npm run build`}</CodeBlock>
+  </div>
+);
+
+const McpSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// AI integratsiyasi</span>
+    <h1>MCP Server</h1>
+    <p>
+      Robo Mentor{' '}
+      <a href="https://modelcontextprotocol.io/" target="_blank">Model Context Protocol</a>{' '}
+      (MCP) serverini qo‘llab-quvvatlaydi.
+    </p>
+
+    <h2>Mavjud asboblar</h2>
+    <table>
+      <thead><tr><th>Asbob</th><th>Tavsif</th></tr></thead>
+      <tbody>
+        <tr><td><code>compile_project</code></td><td>Arduino fayllarini kompilyatsiya qilish</td></tr>
+        <tr><td><code>import_wokwi_json</code></td><td>Wokwi diagrammasini o‘qish</td></tr>
+        <tr><td><code>export_wokwi_json</code></td><td>Sxemani Wokwi formatiga chiqarish</td></tr>
+        <tr><td><code>create_circuit</code></td><td>Yangi sxema yaratish</td></tr>
+        <tr><td><code>generate_code_files</code></td><td>Boshlang‘ich kod yaratish</td></tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+const SetupSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// loyiha holati</span>
+    <h1>Loyiha Holati</h1>
+
+    <h2>AVR Emulyatsiyasi</h2>
+    <table>
+      <thead><tr><th>Xususiyat</th><th>Holat</th></tr></thead>
+      <tbody>
+        <tr><td>ATmega328p 16 MHz</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>Timer0,1,2</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>USART (Serial)</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>ADC</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>GPIO</td><td>✅ Ishlaydi</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Komponent tizimi (48+)</h2>
+    <table>
+      <thead><tr><th>Xususiyat</th><th>Holat</th></tr></thead>
+      <tbody>
+        <tr><td>Avtomatik aniqlash</td><td>✅ 48 komponent</td></tr>
+        <tr><td>Komponent tanlash oynasi</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>Sudrab tashlash</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>Aylantirish</td><td>✅ Ishlaydi</td></tr>
+        <tr><td>Xususiyatlar oynasi</td><td>✅ Ishlaydi</td></tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+const RiscVEmulationSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// risc-v</span>
+    <h1>RISC-V Emulyatsiyasi (ESP32-C3)</h1>
+    <p>
+      ESP32-C3, XIAO ESP32-C3 va C3 SuperMini platlari <strong>RISC-V RV32IMC</strong> yadrosida ishlaydi.
+      Robo Mentor ularni to‘liq brauzerda emulyatsiya qiladi.
+    </p>
+
+    <h2>Qo‘llab-quvvatlanadigan platlar</h2>
+    <table>
+      <thead><tr><th>Plata</th><th>CPU</th><th>Flash</th><th>RAM</th></tr></thead>
+      <tbody>
+        <tr><td>ESP32-C3</td><td>RV32IMC @ 160 MHz</td><td>4 MB</td><td>384 KB</td></tr>
+        <tr><td>XIAO ESP32-C3</td><td>RV32IMC @ 160 MHz</td><td>4 MB</td><td>384 KB</td></tr>
+        <tr><td>C3 SuperMini</td><td>RV32IMC @ 160 MHz</td><td>4 MB</td><td>384 KB</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Xotira xaritasi</h2>
+    <table>
+      <thead><tr><th>Hudud</th><th>Manzil</th><th>Hajmi</th></tr></thead>
+      <tbody>
+        <tr><td>IROM (Flash)</td><td><code>0x42000000</code></td><td>4 MB</td></tr>
+        <tr><td>DRAM</td><td><code>0x3FC80000</code></td><td>384 KB</td></tr>
+        <tr><td>UART0</td><td><code>0x60000000</code></td><td>1 KB</td></tr>
+        <tr><td>GPIO</td><td><code>0x60004000</code></td><td>512 B</td></tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+const Esp32EmulationSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// xtensa</span>
+    <h1>ESP32 Emulyatsiyasi (Xtensa)</h1>
+    <p>
+      ESP32 va ESP32-S3 platlari <strong>Xtensa LX6 / LX7</strong> arxitekturasidan foydalanadi.
+      Robo Mentor ular uchun <strong>QEMU asosidagi backend</strong> dan foydalanadi.
+    </p>
+
+    <div className="docs-callout">
+      <strong>Eslatma:</strong> Bu bo‘lim faqat <strong>ESP32</strong> va <strong>ESP32-S3</strong> (Xtensa) uchun.
+      ESP32-C3 (RISC-V) uchun yon menyudagi RISC-V bo‘limiga qarang.
+    </div>
+
+    <h2>Qanday ishlaydi</h2>
+    <ol>
+      <li>Arduino kodi <code>arduino-cli</code> bilan kompilyatsiya qilinadi</li>
+      <li>Frontend binaryni WebSocket orqali backendga yuboradi</li>
+      <li>Backend QEMU jarayonini ishga tushiradi</li>
+      <li>GPIO va UART hodisalari brauzerga qaytariladi</li>
+      <li>Frontend komponentlarni yangilaydi</li>
+    </ol>
+
+    <h2>Qo‘llab-quvvatlanadigan platlar</h2>
+    <table>
+      <thead><tr><th>Plata</th><th>CPU</th></tr></thead>
+      <tbody>
+        <tr><td>ESP32 DevKit C V4</td><td>Xtensa LX6 @ 240 MHz</td>
+        <tr><td>ESP32-S3</td><td>Xtensa LX7 @ 240 MHz</td>
+        <tr><td>ESP32-CAM</td><td>Xtensa LX6 @ 240 MHz</td>
+        <tr><td>XIAO ESP32-S3</td><td>Xtensa LX7 @ 240 MHz</td>
+      </tbody>
+    </table>
+  </div>
+);
+
+const Rp2040EmulationSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// arm cortex-m0+</span>
+    <h1>RP2040 Emulyatsiyasi (Raspberry Pi Pico)</h1>
+    <p>
+      Raspberry Pi Pico va Pico W to‘liq brauzerda{' '}
+      <a href="https://github.com/wokwi/rp2040js" target="_blank">rp2040js</a> yordamida emulyatsiya qilinadi.
+    </p>
+
+    <h2>Qo‘llab-quvvatlanadigan platlar</h2>
+    <table>
+      <thead><tr><th>Plata</th><th>FQBN</th><th>O‘rnatilgan LED</th></tr></thead>
+      <tbody>
+        <tr><td>Raspberry Pi Pico</td><td><code>rp2040:rp2040:rpipico</code></td><td>GPIO 25</td>
+        <tr><td>Raspberry Pi Pico W</td><td><code>rp2040:rp2040:rpipicow</code></td><td>GPIO 25</td>
+      </tbody>
+    </table>
+
+    <h2>Periferiyalar</h2>
+    <table>
+      <thead><tr><th>Periferiya</th><th>Qo‘llab-quvvatlash</th></tr></thead>
+      <tbody>
+        <tr><td>GPIO (30 pin)</td><td>✅ To‘liq</td>
+        <tr><td>UART0/1</td><td>✅ To‘liq</td>
+        <tr><td>ADC</td><td>✅ To‘liq</td>
+        <tr><td>I2C</td><td>🟡 Qisman</td>
+        <tr><td>SPI</td><td>🟡 Faqat loopback</td>
+        <tr><td>PWM</td><td>🟡 Faqat chastota</td>
+      </tbody>
+    </table>
+  </div>
+);
+
+const RaspberryPi3EmulationSection: React.FC = () => (
+  <div className="docs-section">
+    <span className="docs-label">// qemu raspi3b</span>
+    <h1>Raspberry Pi 3 Emulyatsiyasi (QEMU)</h1>
+    <p>
+      Raspberry Pi 3B <strong>QEMU 8.1.3</strong> va <code>-M raspi3b</code> yordamida emulyatsiya qilinadi.
+      Bu Robo Mentordagi to‘liq operatsion tizimni ishga tushiradigan yagona platadir.
+    </p>
+
+    <h2>Qo‘llab-quvvatlanadigan plata</h2>
+    <table>
+      <thead><tr><th>Plata</th><th>QEMU Mashinasi</th><th>CPU</th></tr></thead>
+      <tbody>
+        <tr><td>Raspberry Pi 3B</td><td><code>raspi3b</code></td><td>BCM2837, 4× Cortex-A53 @ 1.2 GHz</td>
+      </tbody>
+    </table>
+
+    <h2>Maʼlum cheklovlar</h2>
+    <ul>
+      <li>I2C/SPI qurilma emulyatsiyasi yo‘q</li>
+      <li>PWM to‘lqin shakli yo‘q</li>
+      <li>Tarmoq (WiFi/Ethernet) emulyatsiya qilinmagan</li>
+      <li>Sessiya holati saqlanmaydi</li>
+      <li>Yuklanish vaqti sekin (~10-20 soniya)</li>
+    </ul>
+  </div>
+);
+
+const SECTION_MAP: Record<SectionId, React.FC> = {
+  intro: IntroSection,
+  'getting-started': GettingStartedSection,
+  emulator: EmulatorSection,
+  'riscv-emulation': RiscVEmulationSection,
+  'esp32-emulation': Esp32EmulationSection,
+  'rp2040-emulation': Rp2040EmulationSection,
+  'raspberry-pi3-emulation': RaspberryPi3EmulationSection,
+  components: ComponentsSection,
+  roadmap: RoadmapSection,
+  architecture: ArchitectureSection,
+  'wokwi-libs': WokwiLibsSection,
+  mcp: McpSection,
+  setup: SetupSection,
+};
+
+/* ── Sahifa ─────────────────────────────────────────────── */
+export const DocsPage: React.FC = () => {
+  const { section } = useParams<{ section?: string }>();
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const activeSection: SectionId =
+    section && VALID_SECTIONS.includes(section as SectionId)
+      ? (section as SectionId)
+      : 'intro';
+
+  useEffect(() => {
+    if (!section) {
+      navigate('/docs/intro', { replace: true });
+    }
+  }, [section, navigate]);
+
+  useEffect(() => {
+    const origTitle = document.title;
+    const captureAttr = <E extends Element>(selector: string, attr: string): [E | null, string] => {
+      const el = document.querySelector<E>(selector);
+      return [el, el?.getAttribute(attr) ?? ''];
+    };
+
+    const [descEl, origDesc] = captureAttr<HTMLMetaElement>('meta[name="description"]', 'content');
+    const [canonicalEl, origCanonical] = captureAttr<HTMLLinkElement>('link[rel="canonical"]', 'href');
+
+    return () => {
+      document.title = origTitle;
+      descEl?.setAttribute('content', origDesc);
+      canonicalEl?.setAttribute('href', origCanonical);
+      document.getElementById('docs-jsonld')?.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    const meta = SECTION_META[activeSection];
+    const pageUrl = `${BASE_URL}/docs/${activeSection}`;
+
+    document.title = meta.title;
+
+    const set = (selector: string, value: string) =>
+      document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', value);
+
+    set('meta[name="description"]', meta.description);
+
+    const canonicalEl = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonicalEl) canonicalEl.setAttribute('href', pageUrl);
+
+    const activeNav = NAV_ITEMS.find((i) => i.id === activeSection);
+    const sectionLabel = activeNav?.label ?? activeSection;
+
+    const ldId = 'docs-jsonld';
+    let ldScript = document.getElementById(ldId) as HTMLScriptElement | null;
+    if (!ldScript) {
+      ldScript = document.createElement('script');
+      ldScript.id = ldId;
+      ldScript.type = 'application/ld+json';
+      document.head.appendChild(ldScript);
+    }
+    ldScript.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'TechArticle',
+          headline: meta.title,
+          description: meta.description,
+          url: pageUrl,
+          isPartOf: { '@type': 'WebSite', url: `${BASE_URL}/`, name: 'Robo Mentor' },
+          inLanguage: 'uz-UZ',
+          author: AUTHOR,
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: `${BASE_URL}/` },
+            { '@type': 'ListItem', position: 2, name: 'Hujjatlar', item: `${BASE_URL}/docs/intro` },
+            { '@type': 'ListItem', position: 3, name: sectionLabel, item: pageUrl },
+          ],
+        },
+      ],
+    });
+  }, [activeSection]);
+
+  const ActiveContent = SECTION_MAP[activeSection];
+  const activeIdx = NAV_ITEMS.findIndex((i) => i.id === activeSection);
+
+  return (
+    <div className="docs-page">
+      <AppHeader />
+      <div className="docs-mobile-bar">
+        <button
+          className="docs-sidebar-toggle"
+          onClick={() => setSidebarOpen((v) => !v)}
+          aria-label="Yon menyuni ochish/yopish"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <span className="docs-mobile-bar-title">Hujjatlar</span>
+      </div>
+
+      <div className="docs-body">
+        <aside className={`docs-sidebar${sidebarOpen ? ' docs-sidebar--open' : ''}`}>
+          <div className="docs-sidebar-title">Hujjatlar</div>
+          <nav className="docs-sidebar-nav">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.id}
+                to={`/docs/${item.id}`}
+                className={`docs-sidebar-item${activeSection === item.id ? ' docs-sidebar-item--active' : ''}`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="docs-sidebar-divider" />
+          <div className="docs-sidebar-title docs-sidebar-title--pages">Sahifalar</div>
+          <nav className="docs-sidebar-nav">
+            <Link to="/" className="docs-sidebar-item docs-sidebar-link" onClick={() => setSidebarOpen(false)}>Bosh sahifa</Link>
+            <Link to="/editor" className="docs-sidebar-item docs-sidebar-link" onClick={() => setSidebarOpen(false)}>Muharrir</Link>
+            <Link to="/examples" className="docs-sidebar-item docs-sidebar-link" onClick={() => setSidebarOpen(false)}>Misollar</Link>
+          </nav>
+          <div className="docs-sidebar-footer">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="docs-sidebar-gh">
+              <IcoGitHub /> GitHub’da ko‘rish
+            </a>
+          </div>
+        </aside>
+
+        <main className="docs-main">
+          <ActiveContent />
+
+          <div className="docs-pagination">
+            {activeIdx > 0 && (
+              <Link
+                to={`/docs/${NAV_ITEMS[activeIdx - 1].id}`}
+                className="docs-pagination-btn docs-pagination-btn--prev"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                ← {NAV_ITEMS[activeIdx - 1].label}
+              </Link>
+            )}
+            {activeIdx < NAV_ITEMS.length - 1 && (
+              <Link
+                to={`/docs/${NAV_ITEMS[activeIdx + 1].id}`}
+                className="docs-pagination-btn docs-pagination-btn--next"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                {NAV_ITEMS[activeIdx + 1].label} →
+              </Link>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};

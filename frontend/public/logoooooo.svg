@@ -1,0 +1,57 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#0066FF"/>
+    </linearGradient>
+
+    <linearGradient id="eye" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#00FFF0"/>
+      <stop offset="1" stop-color="#00C2FF"/>
+    </linearGradient>
+
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="120" fill="#0B1020"/>
+
+  <!-- Outer Ring -->
+  <circle cx="256" cy="256" r="170" stroke="url(#bg)" stroke-width="12" opacity="0.8"/>
+
+  <!-- Robot Head -->
+  <rect x="146" y="150" width="220" height="180" rx="48" fill="#131A2E" stroke="url(#bg)" stroke-width="10"/>
+
+  <!-- Antenna -->
+  <line x1="256" y1="110" x2="256" y2="150" stroke="#00D4FF" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="256" cy="92" r="18" fill="#00E5FF" filter="url(#glow)"/>
+
+  <!-- Eyes -->
+  <rect x="182" y="215" width="54" height="28" rx="14" fill="url(#eye)" filter="url(#glow)"/>
+  <rect x="276" y="215" width="54" height="28" rx="14" fill="url(#eye)" filter="url(#glow)"/>
+
+  <!-- Mouth / Circuit -->
+  <path d="M205 285H307" stroke="#00E5FF" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="205" cy="285" r="8" fill="#00E5FF"/>
+  <circle cx="256" cy="285" r="8" fill="#00E5FF"/>
+  <circle cx="307" cy="285" r="8" fill="#00E5FF"/>
+
+  <!-- Side Ears -->
+  <rect x="118" y="205" width="24" height="70" rx="12" fill="#00BFFF"/>
+  <rect x="370" y="205" width="24" height="70" rx="12" fill="#00BFFF"/>
+
+  <!-- Bottom Base -->
+  <path d="M180 365C205 390 307 390 332 365" stroke="url(#bg)" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Text -->
+  <text x="256" y="455" text-anchor="middle" fill="#EAFBFF" font-size="42" font-family="Arial, sans-serif" font-weight="700" letter-spacing="2">
+    ROBO MENTOR
+  </text>
+</svg>
+

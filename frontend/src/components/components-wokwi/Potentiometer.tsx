@@ -28,14 +28,16 @@ export const Potentiometer = ({
     const element = potRef.current;
     if (!element || !onChange) return;
 
-    const handleChange = (e: any) => {
-      onChange(e.detail.value);
+    const handleChange = (e: Event) => {
+      const t = e.target as HTMLInputElement & { value?: number };
+      const v = t?.value ?? (e as CustomEvent).detail;
+      if (v !== undefined) onChange(Number(v));
     };
 
-    element.addEventListener('wokwi-potentiometer-change', handleChange);
+    element.addEventListener('input', handleChange);
 
     return () => {
-      element.removeEventListener('wokwi-potentiometer-change', handleChange);
+      element.removeEventListener('input', handleChange);
     };
   }, [onChange]);
 

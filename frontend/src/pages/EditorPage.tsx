@@ -6,8 +6,6 @@ import React, { useRef, useState, useCallback, useEffect, lazy, Suspense } from 
 import { useSEO } from '../utils/useSEO';
 import { CodeEditor } from '../components/editor/CodeEditor';
 import { EditorToolbar } from '../components/editor/EditorToolbar';
-import { FileTabs } from '../components/editor/FileTabs';
-import { FileExplorer } from '../components/editor/FileExplorer';
 
 // Lazy-load Pi workspace so xterm.js isn't in the main bundle
 const RaspberryPiWorkspace = lazy(() =>
@@ -19,14 +17,15 @@ import { SerialMonitor } from '../components/simulator/SerialMonitor';
 import { Oscilloscope } from '../components/simulator/Oscilloscope';
 import { AppHeader } from '../components/layout/AppHeader';
 import { SaveProjectModal } from '../components/layout/SaveProjectModal';
-import { LoginPromptModal } from '../components/layout/LoginPromptModal';
-import { GitHubStarBanner } from '../components/layout/GitHubStarBanner';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useOscilloscopeStore } from '../store/useOscilloscopeStore';
 import { useAuthStore } from '../store/useAuthStore';
 import type { CompilationLog } from '../utils/compilationLogger';
 import '../App.css';
-
+import { FileExplorer } from '../components/editor/FileExplorer';
+import { LoginPromptModal } from '../components/layout/LoginPromptModal';
+import { AITutorPanel } from '../components/ai-tutor/AITutorPanel';
+import {CircuitWatcher} from '../components/ai-tutor/CircuitWatcher';
 const MOBILE_BREAKPOINT = 768;
 
 const BOTTOM_PANEL_MIN = 80;
@@ -51,7 +50,7 @@ export const EditorPage: React.FC = () => {
     title: 'Multi-Board Simulator Editor — Arduino, ESP32, RP2040, RISC-V | Velxio',
     description:
       'Write, compile and simulate Arduino, ESP32, Raspberry Pi Pico, ESP32-C3, and Raspberry Pi 3 code in your browser. 19 boards, 5 CPU architectures, 48+ components. Free and open-source.',
-    url: 'https://velxio.dev/editor',
+    url: 'https://simulyator.adxamov.uz/editor',
   });
 
   const [editorWidthPct, setEditorWidthPct] = useState(45);
@@ -271,8 +270,7 @@ export const EditorPage: React.FC = () => {
             flexDirection: 'row',
           }}
         >
-          {/* File explorer sidebar + resize handle */}
-          {explorerOpen && (
+          {/* {explorerOpen && (
             <>
               <div style={{ width: explorerWidth, flexShrink: 0, display: 'flex', overflow: 'hidden' }}>
                 <FileExplorer onSaveClick={handleSaveClick} />
@@ -281,33 +279,21 @@ export const EditorPage: React.FC = () => {
                 <div className="explorer-resize-handle" onMouseDown={handleExplorerResizeMouseDown} />
               )}
             </>
-          )}
+          )} */}
 
-          {/* Editor main area */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
-            {/* Explorer toggle + toolbar */}
-            <div style={{ display: 'flex', alignItems: 'stretch', flexShrink: 0 }}>
-              <button
-                className="explorer-toggle-btn"
-                onClick={() => setExplorerOpen((v) => !v)}
-                title={explorerOpen ? 'Hide file explorer' : 'Show file explorer'}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                </svg>
-              </button>
-              <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex',width:'100%', alignItems: 'stretch', flexShrink: 0 }}>
+              <div style={{ flex: 1,height:'100%' }}>
                 <EditorToolbar
                   consoleOpen={consoleOpen}
                   setConsoleOpen={setConsoleOpen}
                   compileLogs={compileLogs}
                   setCompileLogs={setCompileLogs}
+                  onSaveClick={handleSaveClick}
                 />
               </div>
             </div>
 
-            {/* File tabs — hidden when Pi workspace is active */}
-            {!isRaspberryPi3 && <FileTabs />}
 
             {/* Editor area: Pi workspace or Monaco editor */}
             <div className="editor-wrapper" style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
@@ -385,11 +371,14 @@ export const EditorPage: React.FC = () => {
             </>
           )}
         </div>
+        
       </div>
-
+        
       {saveModalOpen && <SaveProjectModal onClose={() => setSaveModalOpen(false)} />}
       {loginPromptOpen && <LoginPromptModal onClose={() => setLoginPromptOpen(false)} />}
-      {showStarBanner && <GitHubStarBanner onClose={handleDismissStarBanner} />}
+      {saveModalOpen && <SaveProjectModal onClose={() => setSaveModalOpen(false)} />}
+      <AITutorPanel />
+      <CircuitWatcher />
     </div>
   );
 };

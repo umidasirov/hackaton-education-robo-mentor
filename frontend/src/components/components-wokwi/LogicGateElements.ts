@@ -1,7 +1,7 @@
 /**
  * LogicGateElements.ts — Custom Web Components for standard logic gates.
  *
- * Implements SVG-rendered logic gate elements for use in the Velxio simulator.
+ * Implements SVG-rendered logic gate elements for use in the vexio simulator.
  * These do NOT exist in wokwi-elements, so we define them here.
  *
  * Tags defined:

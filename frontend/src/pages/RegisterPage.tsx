@@ -8,9 +8,9 @@ import { trackSignUp } from '../utils/analytics';
 
 export const RegisterPage: React.FC = () => {
   useSEO({
-    title: 'Create Account — Velxio',
-    description: 'Create a free Velxio account to save your Arduino projects and share simulations.',
-    url: 'https://velxio.dev/register',
+    title: 'Create Account — vexio',
+    description: 'Create a free vexio account to save your Arduino projects and share simulations.',
+    url: 'https://simulyator.adxamov.uz/register',
     noindex: true,
   });
   const navigate = useNavigate();

@@ -3,650 +3,650 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://velxio.dev/</loc>
+    <loc>https://simulyator.adxamov.uz/</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/editor</loc>
+    <loc>https://simulyator.adxamov.uz/editor</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples</loc>
+    <loc>https://simulyator.adxamov.uz/examples</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs</loc>
+    <loc>https://simulyator.adxamov.uz/docs</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/intro</loc>
+    <loc>https://simulyator.adxamov.uz/docs/intro</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/getting-started</loc>
+    <loc>https://simulyator.adxamov.uz/docs/getting-started</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/emulator</loc>
+    <loc>https://simulyator.adxamov.uz/docs/emulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/esp32-emulation</loc>
+    <loc>https://simulyator.adxamov.uz/docs/esp32-emulation</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/riscv-emulation</loc>
+    <loc>https://simulyator.adxamov.uz/docs/riscv-emulation</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/rp2040-emulation</loc>
+    <loc>https://simulyator.adxamov.uz/docs/rp2040-emulation</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/raspberry-pi3-emulation</loc>
+    <loc>https://simulyator.adxamov.uz/docs/raspberry-pi3-emulation</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/components</loc>
+    <loc>https://simulyator.adxamov.uz/docs/components</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/architecture</loc>
+    <loc>https://simulyator.adxamov.uz/docs/architecture</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/wokwi-libs</loc>
+    <loc>https://simulyator.adxamov.uz/docs/wokwi-libs</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/mcp</loc>
+    <loc>https://simulyator.adxamov.uz/docs/mcp</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/setup</loc>
+    <loc>https://simulyator.adxamov.uz/docs/setup</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/docs/roadmap</loc>
+    <loc>https://simulyator.adxamov.uz/docs/roadmap</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/arduino-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/arduino-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/arduino-emulator</loc>
+    <loc>https://simulyator.adxamov.uz/arduino-emulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/atmega328p-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/atmega328p-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/arduino-mega-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/arduino-mega-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/esp32-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/esp32-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/esp32-s3-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/esp32-s3-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/esp32-c3-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/esp32-c3-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/raspberry-pi-pico-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/raspberry-pi-pico-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/raspberry-pi-simulator</loc>
+    <loc>https://simulyator.adxamov.uz/raspberry-pi-simulator</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/v2</loc>
+    <loc>https://simulyator.adxamov.uz/v2</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/about</loc>
+    <loc>https://simulyator.adxamov.uz/about</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://velxio.dev/examples/blink-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/blink-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/traffic-light</loc>
+    <loc>https://simulyator.adxamov.uz/examples/traffic-light</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/button-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/button-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/fade-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/fade-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/serial-hello</loc>
+    <loc>https://simulyator.adxamov.uz/examples/serial-hello</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/rgb-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/rgb-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/simon-says</loc>
+    <loc>https://simulyator.adxamov.uz/examples/simon-says</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/tft-display</loc>
+    <loc>https://simulyator.adxamov.uz/examples/tft-display</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/lcd-hello</loc>
+    <loc>https://simulyator.adxamov.uz/examples/lcd-hello</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/serial-echo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/serial-echo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/serial-led-control</loc>
+    <loc>https://simulyator.adxamov.uz/examples/serial-led-control</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/i2c-scanner</loc>
+    <loc>https://simulyator.adxamov.uz/examples/i2c-scanner</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/i2c-rtc-read</loc>
+    <loc>https://simulyator.adxamov.uz/examples/i2c-rtc-read</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/i2c-eeprom-rw</loc>
+    <loc>https://simulyator.adxamov.uz/examples/i2c-eeprom-rw</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/spi-loopback</loc>
+    <loc>https://simulyator.adxamov.uz/examples/spi-loopback</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/multi-protocol</loc>
+    <loc>https://simulyator.adxamov.uz/examples/multi-protocol</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-blink</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-blink</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-serial-echo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-serial-echo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-serial-led-control</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-serial-led-control</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-i2c-scanner</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-i2c-scanner</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-i2c-rtc-read</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-i2c-rtc-read</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-i2c-eeprom-rw</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-i2c-eeprom-rw</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-spi-loopback</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-spi-loopback</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-adc-read</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-adc-read</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-multi-protocol</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-multi-protocol</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-blink-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-blink-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-serial-echo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-serial-echo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pi-to-arduino-led-control</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pi-to-arduino-led-control</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/nano-blink</loc>
+    <loc>https://simulyator.adxamov.uz/examples/nano-blink</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/nano-serial</loc>
+    <loc>https://simulyator.adxamov.uz/examples/nano-serial</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/nano-button-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/nano-button-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/nano-fade</loc>
+    <loc>https://simulyator.adxamov.uz/examples/nano-fade</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/mega-blink</loc>
+    <loc>https://simulyator.adxamov.uz/examples/mega-blink</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/mega-serial</loc>
+    <loc>https://simulyator.adxamov.uz/examples/mega-serial</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/mega-led-chase</loc>
+    <loc>https://simulyator.adxamov.uz/examples/mega-led-chase</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/mega-serial-control</loc>
+    <loc>https://simulyator.adxamov.uz/examples/mega-serial-control</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-blink</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-blink</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-serial</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-serial</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-rgb</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-rgb</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-button</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-button</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-serial-echo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-serial-echo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-7segment</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-7segment</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-7segment</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-7segment</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-7segment</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-7segment</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-potentiometer</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-potentiometer</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-rgb-cycle</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-rgb-cycle</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-button-led</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-button-led</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-rgb</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-rgb</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-dht22</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-dht22</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-hcsr04</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-hcsr04</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-pir</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-pir</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-servo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-servo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-photoresistor</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-photoresistor</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/uno-ntc</loc>
+    <loc>https://simulyator.adxamov.uz/examples/uno-ntc</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-dht22</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-dht22</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-hcsr04</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-hcsr04</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-pir</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-pir</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-servo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-servo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-ntc</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-ntc</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/pico-joystick</loc>
+    <loc>https://simulyator.adxamov.uz/examples/pico-joystick</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-dht22</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-dht22</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-hcsr04</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-hcsr04</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-mpu6050</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-mpu6050</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-pir</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-pir</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-servo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-servo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-joystick</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-joystick</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-dht22</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-dht22</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-hcsr04</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-hcsr04</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-pir</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-pir</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/c3-servo</loc>
+    <loc>https://simulyator.adxamov.uz/examples/c3-servo</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32c3-wifi-scan</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32c3-wifi-scan</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32c3-wifi-connect</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32c3-wifi-connect</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32c3-http-server</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32c3-http-server</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32c3-ble-advertise</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32c3-ble-advertise</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-wifi-scan</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-wifi-scan</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-wifi-connect</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-wifi-connect</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-http-server</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-http-server</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-ble-advertise</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-ble-advertise</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-bmp280</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-bmp280</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://velxio.dev/examples/esp32-oled</loc>
+    <loc>https://simulyator.adxamov.uz/examples/esp32-oled</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

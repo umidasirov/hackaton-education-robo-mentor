@@ -263,7 +263,7 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1,
   },
   coreTag: {
-    background: 'rgba(79, 195, 247, 0.15)',
+    background: '#1e1e1e',
     color: '#4fc3f7',
     padding: '0 4px',
     borderRadius: 2,

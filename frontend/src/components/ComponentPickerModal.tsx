@@ -18,6 +18,7 @@ import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import { Attiny85 } from './components-wokwi/Attiny85';
 import './components-wokwi/Esp32Element';        // registers wokwi-esp32
 import './components-wokwi/PiPicoWElement';      // registers wokwi-pi-pico-w
+import './components-wokwi/BreadboardElement';   // registers wokwi-breadboard
 import './ComponentPickerModal.css';
 
 interface ComponentPickerModalProps {
@@ -28,23 +29,23 @@ interface ComponentPickerModalProps {
 }
 
 const BOARD_DESCRIPTIONS: Record<BoardKind, string> = {
-  'arduino-uno':        '8-bit AVR, 32KB flash, 14 digital I/O',
-  'arduino-nano':       'Compact 8-bit AVR, same as Uno',
-  'arduino-mega':       '8-bit AVR, 256KB flash, 54 digital I/O',
-  'raspberry-pi-pico':  'RP2040 dual-core Cortex-M0+',
-  'pi-pico-w':          'RP2040 + WiFi/BT, same emulator as Pico',
-  'raspberry-pi-3':     'ARM64 Cortex-A53 quad-core, Linux/Python (QEMU)',
-  'esp32':              'Xtensa LX6 dual-core, WiFi+BT, 38 GPIO (QEMU)',
-  'esp32-devkit-c-v4':  'ESP32 DevKit C V4, official Espressif (QEMU)',
-  'esp32-cam':          'ESP32 + 2MP camera, microSD (QEMU)',
+  'arduino-uno': '8-bit AVR, 32KB flash, 14 digital I/O',
+  'arduino-nano': 'Compact 8-bit AVR, same as Uno',
+  'arduino-mega': '8-bit AVR, 256KB flash, 54 digital I/O',
+  'raspberry-pi-pico': 'RP2040 dual-core Cortex-M0+',
+  'pi-pico-w': 'RP2040 + WiFi/BT, same emulator as Pico',
+  'raspberry-pi-3': 'ARM64 Cortex-A53 quad-core, Linux/Python (QEMU)',
+  'esp32': 'Xtensa LX6 dual-core, WiFi+BT, 38 GPIO (QEMU)',
+  'esp32-devkit-c-v4': 'ESP32 DevKit C V4, official Espressif (QEMU)',
+  'esp32-cam': 'ESP32 + 2MP camera, microSD (QEMU)',
   'wemos-lolin32-lite': 'Compact ESP32, LiPo battery support (QEMU)',
-  'esp32-s3':           'Xtensa LX7 dual-core, WiFi+BT, AI accel (QEMU)',
-  'xiao-esp32-s3':      'Seeed XIAO tiny form, 8MB flash+PSRAM (QEMU)',
+  'esp32-s3': 'Xtensa LX7 dual-core, WiFi+BT, AI accel (QEMU)',
+  'xiao-esp32-s3': 'Seeed XIAO tiny form, 8MB flash+PSRAM (QEMU)',
   'arduino-nano-esp32': 'Nano form-factor, ESP32-S3, RGB LED (QEMU)',
-  'esp32-c3':           'RISC-V single-core, WiFi+BLE, 22 GPIO (QEMU)',
-  'xiao-esp32-c3':      'Seeed XIAO ESP32-C3 mini board (QEMU)',
+  'esp32-c3': 'RISC-V single-core, WiFi+BLE, 22 GPIO (QEMU)',
+  'xiao-esp32-c3': 'Seeed XIAO ESP32-C3 mini board (QEMU)',
   'aitewinrobot-esp32c3-supermini': 'ESP32-C3 SuperMini (QEMU)',
-  'attiny85':           '8-bit AVR, 8KB flash, 6 GPIO (browser)',
+  'attiny85': '8-bit AVR, 8KB flash, 6 GPIO (browser)',
 };
 
 const ALL_BOARDS: BoardKind[] = [
@@ -116,60 +117,57 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
       <div className="component-picker-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="modal-header">
-          <h2>Add Component</h2>
-          <button className="close-btn" onClick={onClose} aria-label="Close">
-            X
-          </button>
-        </div>
+          <div className='model-panel-pick'>
 
-        {/* Search Bar */}
-        <div className="search-section">
-          <div className="search-input-wrapper">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search components..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
-            {searchQuery && (
-              <button
-                className="clear-search-btn"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
+            <div className="search-input-wrapper">
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search components..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+              {searchQuery && (
+                <button
+                  className="clear-search-btn"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                >
+                  X
+                </button>
+              )}
+            </div>
+            <div className="category-tabs">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="category-select"
               >
-                X
-              </button>
-            )}
-          </div>
-        </div>
+                {/* All */}
+                <option value="all">Barcha Componentlar</option>
 
-        {/* Category Tabs */}
-        <div className="category-tabs">
-          <button
-            className={`category-tab ${selectedCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedCategory('all')}
-          >
-            All Components
+                {/* Categories */}
+                {categories
+                  .filter((c) => c !== 'boards')
+                  .map((category) => (
+                    <option key={category} value={category}>
+                      {ComponentRegistry.getCategoryDisplayName(category)}
+                    </option>
+                  ))}
+
+                {/* Boards */}
+                {onSelectBoard && (
+                  <option value="boards">Boards</option>
+                )}
+              </select>
+            </div>
+          </div>
+          <button className="close-btn" onClick={onClose} aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 50 50">
+              <path d="M 40.783203 7.2714844 A 2.0002 2.0002 0 0 0 39.386719 7.8867188 L 25.050781 22.222656 L 10.714844 7.8867188 A 2.0002 2.0002 0 0 0 9.2792969 7.2792969 A 2.0002 2.0002 0 0 0 7.8867188 10.714844 L 22.222656 25.050781 L 7.8867188 39.386719 A 2.0002 2.0002 0 1 0 10.714844 42.214844 L 25.050781 27.878906 L 39.386719 42.214844 A 2.0002 2.0002 0 1 0 42.214844 39.386719 L 27.878906 25.050781 L 42.214844 10.714844 A 2.0002 2.0002 0 0 0 40.783203 7.2714844 z"></path>
+            </svg>
           </button>
-          {categories.filter((c) => c !== 'boards').map((category) => (
-            <button
-              key={category}
-              className={`category-tab ${selectedCategory === category ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {ComponentRegistry.getCategoryDisplayName(category)}
-            </button>
-          ))}
-          {onSelectBoard && (
-            <button
-              className={`category-tab ${selectedCategory === 'boards' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('boards')}
-            >
-              Boards
-            </button>
-          )}
         </div>
 
         {/* Boards Panel */}
@@ -186,7 +184,7 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
         ) : (
           <>
             {/* Boards row in "All Components" view */}
-            {selectedCategory === 'all' && onSelectBoard && (
+            {/* {selectedCategory === 'all' && onSelectBoard && (
               <div className="components-grid" style={{ borderBottom: '1px solid #333', paddingBottom: 8, marginBottom: 4 }}>
                 {ALL_BOARDS.filter((k) =>
                   !searchQuery || BOARD_KIND_LABELS[k].toLowerCase().includes(searchQuery.toLowerCase())
@@ -198,7 +196,7 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
                   />
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Components Grid */}
             <div className="components-grid">
@@ -323,20 +321,20 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component, onSelect }) =>
 // Tag name used to render a thumbnail for each board kind.
 // Boards without a tag will show a generic chip icon.
 const BOARD_TAG: Partial<Record<BoardKind, string>> = {
-  'arduino-uno':        'wokwi-arduino-uno',
-  'arduino-nano':       'wokwi-arduino-nano',
-  'arduino-mega':       'wokwi-arduino-mega',
-  'raspberry-pi-pico':  'wokwi-nano-rp2040-connect',
-  'pi-pico-w':          'wokwi-pi-pico-w',
-  'esp32':              'wokwi-esp32',
-  'esp32-devkit-c-v4':  'wokwi-esp32',
-  'esp32-cam':          'wokwi-esp32',
+  'arduino-uno': 'wokwi-arduino-uno',
+  'arduino-nano': 'wokwi-arduino-nano',
+  'arduino-mega': 'wokwi-arduino-mega',
+  'raspberry-pi-pico': 'wokwi-nano-rp2040-connect',
+  'pi-pico-w': 'wokwi-pi-pico-w',
+  'esp32': 'wokwi-esp32',
+  'esp32-devkit-c-v4': 'wokwi-esp32',
+  'esp32-cam': 'wokwi-esp32',
   'wemos-lolin32-lite': 'wokwi-esp32',
-  'esp32-s3':           'wokwi-esp32',
-  'xiao-esp32-s3':      'wokwi-esp32',
+  'esp32-s3': 'wokwi-esp32',
+  'xiao-esp32-s3': 'wokwi-esp32',
   'arduino-nano-esp32': 'wokwi-esp32',
-  'esp32-c3':           'wokwi-esp32',
-  'xiao-esp32-c3':      'wokwi-esp32',
+  'esp32-c3': 'wokwi-esp32',
+  'xiao-esp32-c3': 'wokwi-esp32',
   'aitewinrobot-esp32c3-supermini': 'wokwi-esp32',
 };
 

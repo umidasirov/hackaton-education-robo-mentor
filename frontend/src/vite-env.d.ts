@@ -49,5 +49,6 @@ declare namespace JSX {
     'wokwi-logic-nor': any;
     'wokwi-logic-xor': any;
     'wokwi-logic-not': any;
+    'wokwi-breadboard': any;
   }
 }

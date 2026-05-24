@@ -3,8 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
-  height: 46px;
+  height: 34px;
+  padding-bottom: 20px;
+  padding-top: 20px;
   background: #252526;
   border-bottom: 1px solid #333;
   flex-shrink: 0;

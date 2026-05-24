@@ -46,7 +46,7 @@ const JSON_LD: object[] = [
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online ESP32 simulator with real Xtensa LX6 emulation via QEMU. Simulate ESP32, ESP32-S3, and ESP32-CAM code with 48+ interactive components — no install, no account.',
-    url: 'https://velxio.dev/esp32-simulator',
+    url: 'https://simulyator.adxamov.uz/esp32-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -64,8 +64,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'ESP32 Simulator', item: 'https://velxio.dev/esp32-simulator' },
+      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://simulyator.adxamov.uz/' },
+      { '@type': 'ListItem', position: 2, name: 'ESP32 Simulator', item: 'https://simulyator.adxamov.uz/esp32-simulator' },
     ],
   },
 ];

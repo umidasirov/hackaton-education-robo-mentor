@@ -1,6 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import axios from 'axios';
 import { useEditorStore } from '../../store/useEditorStore';
 import { useSimulatorStore } from '../../store/useSimulatorStore';
+import { useCircuitIssuesStore } from '../../store/useCircuitIssuesStore';
 import type { BoardKind, LanguageMode } from '../../types/board';
 import { BOARD_KIND_FQBN, BOARD_KIND_LABELS, BOARD_SUPPORTS_MICROPYTHON } from '../../types/board';
 import { compileCode } from '../../services/compilation';
@@ -43,8 +45,17 @@ const BOARD_PILL_COLOR: Record<BoardKind, string> = {
   'esp32-s3': '#a5d6a7',
   'esp32-c3': '#a5d6a7',
 };
-
-export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compileLogs, setCompileLogs }: EditorToolbarProps) => {
+interface EditorToolbarProps {
+  onSaveClick: () => void;
+}
+const IcoSave = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </svg>
+);
+export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compileLogs, setCompileLogs, onSaveClick }: EditorToolbarProps) => {
   const { files, codeChangedSinceLastCompile, markCompiled } = useEditorStore();
   const {
     boards,
@@ -62,7 +73,13 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
     resetSimulation,
     running,
     compiledHex,
+    components,
+    wires,
   } = useSimulatorStore();
+
+  // RUN bosilganda fizik zarar tekshiruvi uchun
+  const setRunIssues = useCircuitIssuesStore((s) => s.setRunIssues);
+  const setIsRunning = useCircuitIssuesStore((s) => s.setIsRunning);
 
   const activeBoard = boards.find((b) => b.id === activeBoardId) ?? boards[0];
   const [compiling, setCompiling] = useState(false);
@@ -77,10 +94,6 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
   const overflowMenuRef = useRef<HTMLDivElement>(null);
   const [missingLibHint, setMissingLibHint] = useState(false);
 
-  // (ResizeObserver removed — Library Manager is always visible now,
-  // only import/export live in the overflow menu)
-
-  // Close overflow dropdown on outside click
   useEffect(() => {
     if (!overflowOpen) return;
     const handler = (e: MouseEvent) => {
@@ -187,6 +200,44 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
   const autoRunAfterCompile = useRef(false);
 
   const handleRun = async () => {
+    // RUN bosilganda: simulyatsiya boshlanganini belgilash va fizik zarar tekshiruvi
+    setIsRunning(true);
+    void runDamageCheck();
+    return handleRunInternal();
+  };
+
+  // ── Fizik zarar tekshiruvi (faqat RUN bosilganda) ────────────────────────
+  // AI dan sxemaning fizik xavfsizligini so'raydi: kuyish, portlash, qisqa
+  // tutashuv. Natija chaqmoq belgilari sifatida canvas'da ko'rinadi.
+  const runDamageCheck = async () => {
+    try {
+      const activeFile = files.find((f) => f.id === useEditorStore.getState().activeFileId);
+      const payload = {
+        code: activeFile?.content ?? '',
+        components: components.map((c: any) => ({
+          type: c.metadataId || c.type,
+          id: c.id,
+          properties: c.properties,
+        })),
+        connections: wires.map((w: any) => ({
+          from: w.start.componentId,
+          fromPin: w.start.pinName,
+          to: w.end.componentId,
+          toPin: w.end.pinName,
+        })),
+        mode: 'run',
+      };
+      if (!payload.code.trim() && payload.components.length === 0) return;
+      const res = await axios.post('/api/ai-tutor/check-circuit', payload);
+      if (res.data?.success && Array.isArray(res.data.issues)) {
+        setRunIssues(res.data.issues);
+      }
+    } catch {
+      // Jim - zarar tekshiruvi ishlamasa simulyatsiya baribir davom etadi
+    }
+  };
+
+  const handleRunInternal = async () => {
     if (activeBoardId) {
       const board = boards.find((b) => b.id === activeBoardId);
 
@@ -296,6 +347,8 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
     if (activeBoardId) stopBoard(activeBoardId);
     else stopSimulation();
     setMessage(null);
+    // Simulyatsiya to'xtadi - portlash/zarar chaqmoqlarini o'chiramiz
+    setIsRunning(false);
   };
 
   const handleReset = () => {
@@ -303,6 +356,7 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
     if (activeBoardId) resetBoard(activeBoardId);
     else resetSimulation();
     setMessage(null);
+    setIsRunning(false);
   };
 
   const handleCompileAll = async () => {
@@ -451,7 +505,6 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
   return (
     <>
       <div className="editor-toolbar-wrapper" style={{ position: 'relative' }}>
-        {/* Compile All progress panel — floats above the toolbar */}
         {compileAllOpen && (
           <CompileAllProgress
             statuses={compileAllStatuses}
@@ -462,7 +515,7 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
         )}
       <div className="editor-toolbar" ref={toolbarRef}>
         {/* Active board context pill */}
-        {activeBoard && (
+        {/* {activeBoard && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <div
               className="tb-board-pill"
@@ -497,7 +550,7 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
               </select>
             )}
           </div>
-        )}
+        )} */}
 
         <div className="toolbar-group">
           {/* Compile */}
@@ -535,6 +588,13 @@ export const EditorToolbar = ({ consoleOpen, setConsoleOpen, compileLogs: _compi
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
               <polygon points="5,3 19,12 5,21" />
             </svg>
+          </button>
+           <button
+            className="file-explorer-save-btn"
+            title="Save project (Ctrl+S)"
+            onClick={onSaveClick}
+          >
+            <IcoSave />
           </button>
 
           {/* Stop */}

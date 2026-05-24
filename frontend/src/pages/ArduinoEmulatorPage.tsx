@@ -45,7 +45,7 @@ const JSON_LD: object[] = [
     operatingSystem: 'Any (browser-based)',
     description:
       'Free, open-source Arduino emulator with cycle-accurate AVR8 emulation at 16 MHz. Emulate Arduino Uno, Nano, Mega and Raspberry Pi Pico in your browser — no cloud, no install.',
-    url: 'https://velxio.dev/arduino-emulator',
+    url: 'https://simulyator.adxamov.uz/arduino-emulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -63,8 +63,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'Arduino Emulator', item: 'https://velxio.dev/arduino-emulator' },
+      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://simulyator.adxamov.uz/' },
+      { '@type': 'ListItem', position: 2, name: 'Arduino Emulator', item: 'https://simulyator.adxamov.uz/arduino-emulator' },
     ],
   },
 ];

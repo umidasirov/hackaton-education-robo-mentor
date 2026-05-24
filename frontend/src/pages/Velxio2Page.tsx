@@ -131,7 +131,7 @@ const JSON_LD: object[] = [
     softwareVersion: '2.0.0',
     description:
       'Velxio 2.0 — simulate Arduino, ESP32, Raspberry Pi Pico, and Raspberry Pi 3 in your browser. 19 boards, 68+ examples, realistic sensor simulation. Free and open-source.',
-    url: 'https://velxio.dev/v2',
+    url: 'https://simulyator.adxamov.uz/v2',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -140,8 +140,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'Velxio 2.0', item: 'https://velxio.dev/v2' },
+      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://simulyator.adxamov.uz/' },
+      { '@type': 'ListItem', position: 2, name: 'Velxio 2.0', item: 'https://simulyator.adxamov.uz/v2' },
     ],
   },
 ];
@@ -270,9 +270,9 @@ export const Velxio2Page: React.FC = () => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
               Try Velxio 2.0
             </Link>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="seo-btn-secondary">
+            {/* <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="seo-btn-secondary">
               <IcoGitHub /> View on GitHub
-            </a>
+            </a> */}
           </div>
 
           {/* Community CTAs */}

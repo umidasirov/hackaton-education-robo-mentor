@@ -45,7 +45,6 @@ body {
   margin: 0;
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -53,14 +52,12 @@ body {
 
 #root {
   width: 100%;
-  min-height: 100vh;
 }
 
 /* ── Shared auth / page utility classes ─────────────────── */
 
 /* Full-page centered layout */
 .ap-page {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

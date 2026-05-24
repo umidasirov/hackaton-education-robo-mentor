@@ -93,7 +93,7 @@ export function getPrerenderedExampleRoutes() {
     path: `/examples/${e.id}`,
     title: `${e.title} — Free Arduino Simulator Example | Velxio`,
     description: `${e.description}. Run this example free in your browser — no install, no account required.`,
-    url: `https://velxio.dev/examples/${e.id}`,
+    url: `https://simulyator.adxamov.uz/examples/${e.id}`,
   }));
 }
 

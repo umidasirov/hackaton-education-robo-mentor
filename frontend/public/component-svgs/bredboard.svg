@@ -1,0 +1,31 @@
+<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Asosiy korpus -->
+  <rect width="200" height="120" fill="#e8e0d0" rx="4"/>
+  
+  <!-- Markaziy bo'shliq -->
+  <rect x="88" y="0" width="24" height="120" fill="#c8bfb0"/>
+  
+  <!-- Qator sarlavhalari -->
+  <text x="4" y="12" font-size="6" fill="#666" font-family="monospace">ABCDE</text>
+  <text x="4" y="112" font-size="6" fill="#666" font-family="monospace">ABCDE</text>
+
+  <!-- Ustun raqamlari 1-10 -->
+  <!-- Power rails - qizil -->
+  <rect x="0" y="2" width="200" height="6" fill="#ffcccc" rx="2"/>
+  <!-- Power rails - ko'k -->
+  <rect x="0" y="112" width="200" height="6" fill="#cce0ff" rx="2"/>
+
+  <!-- Teshiklar - yuqori blok -->
+  <!-- 30 ustun x 5 qator = 150 teshik -->
+  <g fill="#555">
+    <!-- Qator A -->
+    <rect x="8"  y="20" width="4" height="4" rx="1"/>
+    <rect x="16" y="20" width="4" height="4" rx="1"/>
+    <rect x="24" y="20" width="4" height="4" rx="1"/>
+    <rect x="32" y="20" width="4" height="4" rx="1"/>
+    <rect x="40" y="20" width="4" height="4" rx="1"/>
+    <!-- ... (qolgan teshiklar) -->
+  </g>
+
+  <text x="100" y="65" text-anchor="middle" font-size="8" fill="#666">BREADBOARD</text>
+</svg>

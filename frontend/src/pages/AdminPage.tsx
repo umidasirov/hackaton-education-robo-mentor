@@ -482,7 +482,7 @@ function AdminDashboard() {
     <div style={s.dashboard}>
       <div style={s.header}>
         <div style={s.headerLeft}>
-          <Link to="/" style={s.backLink}>Velxio</Link>
+          <Link to="/" style={s.backLink}>vexio</Link>
           <span style={s.headerSep}>/</span>
           <span style={s.headerTitle}>Admin panel</span>
         </div>
@@ -519,9 +519,9 @@ type AdminPageState = 'loading' | 'setup' | 'not-admin' | 'dashboard';
 
 export const AdminPage: React.FC = () => {
   useSEO({
-    title: 'Admin — Velxio',
-    description: 'Velxio administration panel.',
-    url: 'https://velxio.dev/admin',
+    title: 'Admin — vexio',
+    description: 'vexio administration panel.',
+    url: 'https://simulyator.adxamov.uz/admin',
     noindex: true,
   });
 
