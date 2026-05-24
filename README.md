@@ -31,7 +31,6 @@
 
 ## 🎬 Demo
 
-> **Jonli demo:** [robomentor.uz](https://robomentor.uz) *(yoki localhost:5173)*
 
 <table>
 <tr>
@@ -45,7 +44,7 @@
 </td>
 <td width="50%">
 
-**🤖 AI Repetitor**
+**🤖 AI Mentor**
 - Sxemani tahlil qiladi
 - Xatolarni topadi va tushuntiradi
 - Bosqichma-bosqich yo'naltiradi
@@ -58,7 +57,7 @@
 
 ## ✨ Xususiyatlar
 
-### 🧠 AI Repetitor (Intellektual yordamchi)
+### 🧠 AI Mentor (Intellektual yordamchi)
 | Xususiyat | Tavsif |
 |-----------|--------|
 | 🔍 **Real vaqtli sxema tekshiruvi** | Kod yoki sim o'zgarganda AI avtomatik tahlil qiladi — panel ochiq bo'lmasa ham |
@@ -76,7 +75,6 @@
 - **Drag & drop** sxema qurish
 
 ### 📖 Interaktiv hujjatlar
-- Har komponent uchun **alohida sahifa** — 23school uslubida
 - **Ishlash prinsipi** rasmlar bilan
 - **Ulanish sxemasi** va **kod misollari**
 - **"Simulyatorda ko'rish"** tugmasi — tayyor loyiha ochiladi
@@ -96,7 +94,7 @@ RoboMentor **6 ta AI metod** orqali ishlaydi:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    🧠 AI TUTOR                          │
+│                    🧠 AI Mentor                         │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  📊 analyze_sketch    — Kodni to'g'rilik uchun tahlil   │
@@ -109,10 +107,10 @@ RoboMentor **6 ta AI metod** orqali ishlaydi:
 │  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐   │
 │  │ Scan rejimi  │  │  RUN rejimi  │  │ Loyiha rejimi│   │
 │  │ (8b model)   │  │ (70b model)  │  │ (kontekstli) │   │
-│  │ Token tejash  │  │ Chuqur tahlil│  │ Yo'naltirish │   │
-│  └─────────────┘  └──────────────┘  └──────────────┘   │
+│  │ Token tejash │  │ Chuqur tahlil│  │ Yo'naltirish │   │
+│  └─────────────┘  └──────────────┘  └──────────────┘    │
 │                                                         │
-│  ⚡ Chaqmoq tizimi: danger / error / warning / info     │
+│  ⚡ Chaqmoq tizimi: danger / error / warning / info      │
 │  🎯 O'rgatuvchi: ishora → maslahat → to'liq yechim      │
 │  🔄 Real vaqtli: CircuitWatcher (fon kuzatuvchisi)      │
 │                                                         │
@@ -257,7 +255,7 @@ robomentor/
 ├── frontend/
 │   └── src/
 │       ├── components/
-│       │   ├── ai-tutor/          # 🧠 AI repetitor paneli
+│       │   ├── ai-tutor/          # 🧠 AI mentor paneli
 │       │   │   ├── AITutorPanel   # Chat + maslahat
 │       │   │   ├── CircuitWatcher # Fon kuzatuvchisi
 │       │   │   ├── Markdown       # AI javobni render
