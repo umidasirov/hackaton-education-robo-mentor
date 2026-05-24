@@ -3,9 +3,8 @@
 </p>
 
 <h1 align="center">🤖 RoboMentor</h1>
-<a href="https://robo.mukhtoriddin.uz/">Xususiyatlar</a> •
 <p align="center">
-  <strong>AI yordamchili robototexnika o'rganish platformasi</strong><br/>
+  <strong>AI yordamchili <a href="https://robo.mukhtoriddin.uz/">RoboMentor</a>, robototexnika o'rganish platformasi</strong><br/>
   <em>Hech qanday apparat kerak emas — brauzeringizda real vaqtda elektronika simulyatsiya qiling</em>
 </p>
 
